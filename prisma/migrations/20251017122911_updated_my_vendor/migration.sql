@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "MyVendor" ALTER COLUMN "password" SET DEFAULT '',
+ALTER COLUMN "password" SET DATA TYPE TEXT;

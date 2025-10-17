@@ -20,7 +20,7 @@ const signupSchema = z.object({
   address: z.string().optional(),
   shopName: z.string().optional(),
   gstNumber: z.string().optional(),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string().min(6, "Password must be at least 6 characters").optional(),
 });
 
 export default signupSchema

@@ -14,37 +14,36 @@ model MyWorker {
   id           Int      @id @default(autoincrement())
   name         String   @db.VarChar(50)
   mobileNumber String   @unique @db.VarChar(10)
-  profilePhoto String?  
-  photo        String?  
-  video        String?  
-  dailyWage    Float?   
-  address      String? @db.VarChar(255)
-  rating       Float?   
-  occupation   String?  
-  feedback     String?
-  pastDeals    String?
-  presentDeals String?
+  profilePhoto String?  @default("")
+  photo        String?  @default("")
+  video        String?  @default("")
+  dailyWage    Float?   @default(0)
+  address      String?  @db.VarChar(255)
+  rating       Float?   @default(0)
+  occupation   String?  @default("")
+  feedback     String?  @default("")
+  pastDeals    String?  @default("")
+  presentDeals String?  @default("")
   age          Int
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   User         User[]
 }
 
-
 model MyVendor {
   id            Int      @id @default(autoincrement())
   ownerName     String   @db.VarChar(50)
-  mobileNumber  String?   @db.VarChar(10)
-  profilePhoto  String?
-  shopName      String?   @db.VarChar(100)
-  shopPhoto     String?
+  mobileNumber  String?  @db.VarChar(10)
+  profilePhoto  String?  @default("")
+  shopName      String?  @db.VarChar(100)
+  shopPhoto     String?  @default("")
   email         String   @unique
-  password      String   @db.VarChar(100)
-  address       String?   @db.VarChar(255)
-  rating        Float?
-  bussinessType String?
-  feedback      String?
-  gstNumber     String?   @db.VarChar(20)
+  password      String?   @default("")
+  address       String?  @db.VarChar(255)
+  rating        Float?   @default(0)
+  bussinessType String?  @default("")
+  feedback      String?  @default("")
+  gstNumber     String?  @db.VarChar(20)
   age           Int
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -55,10 +54,10 @@ model MyUser {
   id           Int      @id @default(autoincrement())
   name         String   @db.VarChar(50)
   mobileNumber String   @unique @db.VarChar(10)
-  profilePhoto String? @default("")
+  profilePhoto String?  @default("")
   work         String[]
   isActive     Boolean  @default(true)
-  address      String?   @default("")
+  address      String?  @default("")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   User         User[]
