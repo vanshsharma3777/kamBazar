@@ -1,3 +1,4 @@
+import { success } from 'zod';
 import { prisma } from '../../../../lib/prismaClient/dist/index.js'
 import  singupSchema from '../../../../library/validations/vendorValidation/singup.js'
 import { NextResponse } from "next/server";
@@ -12,13 +13,13 @@ export  async function POST(req: Request) {
             )
         }
         const {
-            name,
+            ownerName,
             age,
-            email,
+            mobileNumber,
         } = isCorrect.data;
 
-        const userExist = await prisma.myVendor.findUnique({
-            where: { email }
+        const userExist = await prisma.myVendor.findFirst({
+            where: { mobileNumber }
         })
         if (userExist) {
             return NextResponse.json(
@@ -29,15 +30,16 @@ export  async function POST(req: Request) {
 
         const user = await prisma.myVendor.create({
             data: {
-                ownerName:name,
+                ownerName:ownerName,
                 age,
-                email:email,
+                mobileNumber
             }
         })
-
+        user.verified=true;
         return NextResponse.json({
             msg: "user created succesfully.",
-            user: user
+            user: user,
+            success:true
         },
             { status: 201 }
         )

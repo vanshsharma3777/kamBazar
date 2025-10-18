@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
 }
 
 datasource db {
@@ -25,6 +26,7 @@ model MyWorker {
   pastDeals    String?  @default("")
   presentDeals String?  @default("")
   age          Int
+  verified     Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   User         User[]
@@ -33,17 +35,18 @@ model MyWorker {
 model MyVendor {
   id            Int      @id @default(autoincrement())
   ownerName     String   @db.VarChar(50)
-  mobileNumber  String?  @db.VarChar(10)
+  mobileNumber  String?  @unique @db.VarChar(10)
   profilePhoto  String?  @default("")
   shopName      String?  @db.VarChar(100)
   shopPhoto     String?  @default("")
-  email         String   @unique
-  password      String?   @default("")
+  email         String?  @db.VarChar(50)
+  password      String?  @default("")
   address       String?  @db.VarChar(255)
   rating        Float?   @default(0)
   bussinessType String?  @default("")
   feedback      String?  @default("")
   gstNumber     String?  @db.VarChar(20)
+  verified      Boolean  @default(false)
   age           Int
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -56,6 +59,7 @@ model MyUser {
   mobileNumber String   @unique @db.VarChar(10)
   profilePhoto String?  @default("")
   work         String[]
+  verified     Boolean  @default(false)
   isActive     Boolean  @default(true)
   address      String?  @default("")
   createdAt    DateTime @default(now())

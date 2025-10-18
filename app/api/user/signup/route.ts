@@ -1,6 +1,8 @@
 import singupSchema from '../../../../library/validations/userValidation/singup.js'
 import { NextResponse } from "next/server";
 import { prisma } from '../../../../lib/prismaClient/dist/index.js'
+import { tr } from 'zod/locales';
+import { success } from 'zod';
 export async function POST(req: Request) {
     try {
         const body = await req.json()
@@ -36,10 +38,11 @@ export async function POST(req: Request) {
                 address
             }
         })
-
+        user.verified=true
         return NextResponse.json({
             msg: "user created succesfully.",
-            user: user
+            user: user,
+            success:true
         },
             { status: 201 }
         )

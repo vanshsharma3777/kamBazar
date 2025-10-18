@@ -1,6 +1,7 @@
 import { PrismaClient ,Prisma } from "../../../generated/prisma/index.js";
 import  singupSchema from '../../../../library/validations/workerValidation/signup.js'
 import { NextResponse } from "next/server";
+import { success } from "zod";
 const prisma = new PrismaClient();
 export  async function POST(req: Request) {
     try {
@@ -18,7 +19,7 @@ export  async function POST(req: Request) {
             age,
         } = isCorrect.data;
 
-        const userExist = await prisma.myWorker.findUnique({
+        const userExist = await prisma.myWorker.findFirst({
             where: { mobileNumber }
         })
         if (userExist) {
@@ -35,10 +36,12 @@ export  async function POST(req: Request) {
                 age,
             }
         })
+        user.verified = true;
 
         return NextResponse.json({
             msg: "user created succesfully.",
-            user: user
+            user: user,
+            success:true
         },
             { status: 201 }
         )
