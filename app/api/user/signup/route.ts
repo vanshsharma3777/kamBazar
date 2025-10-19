@@ -16,8 +16,6 @@ export async function POST(req: Request) {
         const {
             name,
             mobileNumber,
-            profilePhoto,
-            address
         } = isCorrect.data;
 
         const userExist = await prisma.myUser.findUnique({

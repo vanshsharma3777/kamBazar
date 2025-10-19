@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../app/generated/prisma"
+  output   = "./generated/client"
 }
 
 datasource db {
@@ -23,8 +23,8 @@ model MyWorker {
   rating       Float?   @default(0)
   occupation   String?  @default("")
   feedback     String?  @default("")
-  pastDeals    String?  @default("")
-  presentDeals String?  @default("")
+  pastDeals    String[]
+  presentDeals String[]
   age          Int
   verified     Boolean  @default(false)
   createdAt    DateTime @default(now())
@@ -59,6 +59,7 @@ model MyUser {
   mobileNumber String   @unique @db.VarChar(10)
   profilePhoto String?  @default("")
   work         String[]
+  email        String?
   verified     Boolean  @default(false)
   isActive     Boolean  @default(true)
   address      String?  @default("")
@@ -73,12 +74,12 @@ model MyUser {
 model User {
   id            String    @id @default(cuid())
   name          String?
-  role          String
   email         String?   @unique
   emailVerified DateTime?
   image         String?
 
   accounts Account[]
+  session Session[]
   myUserId Int?
   myUser   MyUser?   @relation(fields: [myUserId], references: [id], onDelete: Cascade)
 
@@ -106,4 +107,12 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  sessionToken String  @unique
+  userId    String
+  expires   DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

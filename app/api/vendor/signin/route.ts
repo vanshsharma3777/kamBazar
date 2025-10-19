@@ -10,6 +10,7 @@ export async function POST(req: Request) {
         const isCorrect = signinSchema.safeParse(body)
         if (!isCorrect.success) {
             return NextResponse.json({
+                verified:false,
                 success: false,
                 error: isCorrect.error.flatten().fieldErrors
             },
@@ -17,7 +18,7 @@ export async function POST(req: Request) {
                     status: 400
                 })
         }
-        const { mobileNumber, ownerName } = isCorrect.data
+        const { mobileNumber, ownerName  } = isCorrect.data
         const userExists =await prisma.myVendor.findFirst({
             where: {
                 mobileNumber: mobileNumber,
@@ -26,12 +27,16 @@ export async function POST(req: Request) {
         })
         if (!userExists) {
             return NextResponse.json({
+                verified:false,
                 success: false,
                 msg: "No user found.Try to signup"
             }, { status: 400 })
         }
+        let verified = userExists?.verified
+        verified= true
         return NextResponse.json({
             success: true,
+            verified:true,
             msg: "Vendor Login successfully!"
         },
             {

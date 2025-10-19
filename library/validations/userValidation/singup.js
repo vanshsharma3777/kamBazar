@@ -7,10 +7,6 @@ const signupSchema = z.object({
   mobileNumber: z
     .string({ message: "Mobile number is required" })
     .regex(/^[0-9]{10}$/, "Mobile number must be 10 digits"),
-  profilePhoto: z
-  .string(),
-  address: z
-  .string()
 });
 
 export default signupSchema

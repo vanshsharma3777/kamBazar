@@ -11,6 +11,7 @@ export async function POST(req: Request) {
         if (!isCorrect.success) {
             return NextResponse.json({
                 success: false,
+                verified: false,
                 error: isCorrect.error.flatten().fieldErrors
             },
                 {
@@ -18,7 +19,7 @@ export async function POST(req: Request) {
                 })
         }
         const { mobileNumber, name } = isCorrect.data
-        const userExists =await prisma.myUser.findFirst({
+        const userExists = await prisma.myUser.findFirst({
             where: {
                 mobileNumber: mobileNumber,
                 name: name
@@ -27,11 +28,15 @@ export async function POST(req: Request) {
         if (!userExists) {
             return NextResponse.json({
                 success: false,
+                verified: false,
                 msg: "No user found.Try to signup"
             }, { status: 400 })
         }
+        let verified = userExists.verified
+        verified = true
         return NextResponse.json({
             success: true,
+            verified: true,
             msg: "User Login successfully!"
         },
             {

@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//
+// ====== Your existing models ======
+//
+model MyWorker {
+  id           Int      @id @default(autoincrement())
+  name         String   @db.VarChar(50)
+  mobileNumber String   @unique @db.VarChar(10)
+  profilePhoto String?  @default("")
+  photo        String?  @default("")
+  video        String?  @default("")
+  dailyWage    Float?   @default(0)
+  address      String?  @db.VarChar(255)
+  rating       Float?   @default(0)
+  occupation   String?  @default("")
+  feedback     String?  @default("")
+  pastDeals    String[]
+  presentDeals String[]
+  age          Int
+  verified     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  User         User[]
+}
+
+model MyVendor {
+  id            Int      @id @default(autoincrement())
+  ownerName     String   @db.VarChar(50)
+  mobileNumber  String?  @unique @db.VarChar(10)
+  profilePhoto  String?  @default("")
+  shopName      String?  @db.VarChar(100)
+  shopPhoto     String?  @default("")
+  email         String?  @db.VarChar(50)
+  password      String?  @default("")
+  address       String?  @db.VarChar(255)
+  rating        Float?   @default(0)
+  bussinessType String?  @default("")
+  feedback      String?  @default("")
+  gstNumber     String?  @db.VarChar(20)
+  verified      Boolean  @default(false)
+  age           Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  User          User[]
+}
+
+model MyUser {
+  id           Int      @id @default(autoincrement())
+  name         String   @db.VarChar(50)
+  mobileNumber String   @unique @db.VarChar(10)
+  profilePhoto String?  @default("")
+  work         String[]
+  email        String?
+  verified     Boolean  @default(false)
+  isActive     Boolean  @default(true)
+  address      String?  @default("")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  User         User[]
+}
+
+//
+// ====== NextAuth standard models ======
+//
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+
+  accounts Account[]
+  session  Session[]
+  myUserId Int?
+  myUser   MyUser?   @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+
+  myVendorId Int?
+  myVendor   MyVendor? @relation(fields: [myVendorId], references: [id], onDelete: Cascade)
+
+  myWorkerId Int?
+  myWorker   MyWorker? @relation(fields: [myWorkerId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

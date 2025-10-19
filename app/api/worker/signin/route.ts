@@ -1,6 +1,7 @@
 import { PrismaClient, Prisma } from "../../../generated/prisma/index.js"
 import signinSchema from "../../../../library/validations/workerValidation/signin.js"
 import { NextResponse } from "next/server.js"
+import { use } from "react"
 
 const prisma = new PrismaClient()
 
@@ -18,21 +19,27 @@ export async function POST(req: Request) {
                 })
         }
         const { mobileNumber, name } = isCorrect.data
-        console.log(mobileNumber)
-        console.log(name)
+        const worker = await  prisma.myWorker.findUnique({
+            where:{mobileNumber}
+        })
+        let verified = worker?.verified
         const userExists =await prisma.myWorker.findFirst({
             where: {
                 mobileNumber: mobileNumber,
                 name: name
             }
         })
+
         if (!userExists) {
             return NextResponse.json({
                 success: false,
                 msg: "No user found.Try to signup"
             }, { status: 400 })
         }
+        
+        verified= true
         return NextResponse.json({
+            verified,
             success: true,
             msg: "Worker Login successfully!"
         },
