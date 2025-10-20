@@ -1,12 +1,10 @@
-import  authOptions  from "../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
+import  {authOptions}  from "../auth/[...nextauth]/route";
+import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
-import { success } from "zod";
-
-
-export async function GET(res:Response){
-    const session = await getServerSession(authOptions)
-    console.log(session)
+export async function GET(req:Response , res:Response ){
+    const session:any = await getServerSession(authOptions)
+    console.log("sesion details are :",session)
     return NextResponse.json({
         session,
         msg:"working",

@@ -1,6 +1,5 @@
-'use client'
 
-import { SessionProvider } from "next-auth/react"
+import "./globals.css";
 import { Roboto } from 'next/font/google'
 
 const roboto = Roboto({
@@ -8,13 +7,18 @@ const roboto = Roboto({
   weight: ['400', '700'],
 })
 
+export const metadata = {
+  title: "KaamBazar",
+  description: "Next.js + TailwindCSS",
+};
+
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={roboto.className}>
-        <SessionProvider>
+        
           {children}
-        </SessionProvider>
       </body>
     </html>
   )
