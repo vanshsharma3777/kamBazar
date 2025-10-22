@@ -174,6 +174,15 @@ exports.Prisma.MyUserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WorkScalarFieldEnum = {
+  id: 'id',
+  workType: 'workType',
+  description: 'description',
+  photos: 'photos',
+  alternateNumber: 'alternateNumber',
+  workId: 'workId'
+};
+
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -227,6 +236,7 @@ exports.Prisma.ModelName = {
   MyWorker: 'MyWorker',
   MyVendor: 'MyVendor',
   MyUser: 'MyUser',
+  Work: 'Work',
   User: 'User',
   Account: 'Account',
   Session: 'Session'

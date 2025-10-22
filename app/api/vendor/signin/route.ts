@@ -1,8 +1,8 @@
-import { PrismaClient, Prisma } from "../../../generated/prisma/index.js"
+import { prisma } from "@/lib/prisma"
 import signinSchema from "../../../../library/validations/vendorValidation/signin.js"
 import { NextResponse } from "next/server.js"
 
-const prisma = new PrismaClient()
+
 
 export async function POST(req: Request) {
     try {

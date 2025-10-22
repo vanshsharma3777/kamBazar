@@ -1,13 +1,13 @@
-import { PrismaClient ,Prisma } from "../../../generated/prisma/index.js";
+import { prisma } from "@/lib/prisma";
 import  singupSchema from '../../../../library/validations/workerValidation/signup.js'
 import { NextResponse } from "next/server";
 import { success } from "zod";
-const prisma = new PrismaClient();
 export  async function POST(req: Request) {
     try {
         const body = await req.json()
         const isCorrect = singupSchema.safeParse(body);
         if (!isCorrect.success) {
+            console.log("error in enteries")
             return NextResponse.json(
                 { error: isCorrect.error.flatten().fieldErrors },
                 { status: 400 }

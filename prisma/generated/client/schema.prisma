@@ -66,11 +66,19 @@ model MyUser {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   User         User[]
+  works        Work[]
 }
 
-//
-// ====== NextAuth standard models ======
-//
+model Work {
+  id              String   @id @default(uuid())
+  workType        String
+  description     String
+  photos          String[]
+  alternateNumber String?
+  workId          Int
+  user            MyUser   @relation(fields: [workId], references: [id])
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?

@@ -1,6 +1,6 @@
 import singupSchema from '../../../../library/validations/userValidation/singup.js'
 import { NextResponse } from "next/server";
-import { prisma } from '../../../../lib/prismaClient/dist/index.js'
+import { prisma } from '@/lib/prisma'
 import { tr } from 'zod/locales';
 import { success } from 'zod';
 export async function POST(req: Request) {
@@ -8,6 +8,7 @@ export async function POST(req: Request) {
         const body = await req.json()
         const isCorrect = singupSchema.safeParse(body);
         if (!isCorrect.success) {
+            console.log("error in zod inputs of user")
             return NextResponse.json(
                 { error: isCorrect.error.flatten().fieldErrors },
                 { status: 400 }
@@ -32,11 +33,11 @@ export async function POST(req: Request) {
             data: {
                 name,
                 mobileNumber,
-                profilePhoto,
-                address
+                
             }
         })
         user.verified=true
+        
         return NextResponse.json({
             msg: "user created succesfully.",
             user: user,

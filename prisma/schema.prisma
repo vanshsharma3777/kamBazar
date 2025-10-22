@@ -54,7 +54,7 @@ model MyVendor {
 }
 
 model MyUser {
-  id           Int      @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name         String   @db.VarChar(50)
   mobileNumber String   @unique @db.VarChar(10)
   profilePhoto String?  @default("")
@@ -66,11 +66,19 @@ model MyUser {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   User         User[]
+  works Work[]
 }
 
-//
-// ====== NextAuth standard models ======
-//
+model  Work {
+  id String @id @default(uuid())
+  workType String
+  description String
+  photos String[]
+  alternateNumber String?
+  workId Int
+  user MyUser @relation(fields: [workId] , references: [id])
+
+}
 model User {
   id            String    @id @default(cuid())
   name          String?

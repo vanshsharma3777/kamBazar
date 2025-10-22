@@ -1,23 +1,31 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "../../../../generated/prisma/index.js";
+import {prisma} from "@/lib/prisma";
 import { date, success } from "zod";
 import axios from "axios";
-
-const prisma = new PrismaClient()
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function POST(req: Request) {
     try {
+        const session = await getServerSession(authOptions)
+                if (!session) {
+                    console.log("session not found")
+                    return NextResponse.json({
+                        success: false,
+                        msg: "worker session not found.try to signin first"
+                    },
+                        {
+                            status: 400
+                        })
+                }
+
         const {
             mobileNumber,
             ownerName,
             address,
             shopName,
-            photo,
-            profilePhoto,
             email,
             password,
-            gstNumber,
-            bussinessType,
             age,
 
 
@@ -29,73 +37,37 @@ export async function POST(req: Request) {
             email: string,
             password: string,
             age: number,
-            photo: string,
-            profilePhoto: string,
-            gstNumber: string,
-            bussinessType: string,
 
         } = await req.json()
-        console.log("here1")
-        const vendor = await prisma.myVendor.findFirst({
-            where: { mobileNumber, ownerName },
-        })
-        console.log("here2")
-        if (!vendor) {
-            return NextResponse.json({
-                success: false,
-                msg: "vendor Not found"
-            },
-                {
-                    status: 400
-                })
-        }
-        const response = await axios.post(`${process.env.BACKEND_URL}/api/vendor/signin`, { mobileNumber, ownerName });
-        console.log("here3")
-        console.log(response.data)
-        if (!vendor) {
-            return NextResponse.json({
-                success: false,
-                msg: "vendor Not found"
-            },
-                {
-                    status: 400
-                })
-        }
-        console.log(response.data.verified)
-        if (!response.data.verified) {
-            return NextResponse.json({
-                success: false,
-                msg: "vendor not verified"
-            },
-                {
-                    status: 400
-                })
-        }
+       
 
         const addDetails = await prisma.myVendor.update({
             where: { mobileNumber: mobileNumber },
             data: {
-                address: vendor?.address,
-                profilePhoto: vendor?.profilePhoto,
+                address,
                 shopName,
                 email,
                 password,
-                gstNumber,
-                bussinessType,
                 age,
+                ownerName,
             }
         })
+        console.log("profile updated suceesffuly")
         return NextResponse.json({
             success: true,
             msg: "vendor profile updated successfully!",
             addDetails: addDetails
         })
 
-    } catch (err: any) {
-        console.log(err.message)
+    } catch (error: any) {
+         console.error('API Error Details in vendoor profile creation:', {
+            message: error.message,
+            stack: error.stack,
+            name: error.name
+        })
         return NextResponse.json({
             success: false,
-            error: err.message,
+            error: error.message,
             msg: "Internal error in profile creation of vendor"
         }, { status: 500 })
     }

@@ -1,27 +1,23 @@
 import { success } from 'zod';
-import { prisma } from '../../../../lib/prismaClient/dist/index.js'
+import { prisma } from '@/lib/prisma'
 import  singupSchema from '../../../../library/validations/vendorValidation/singup.js'
 import { NextResponse } from "next/server";
 export  async function POST(req: Request) {
     try {
         const body = await req.json()
-        const isCorrect = singupSchema.safeParse(body);
-        if (!isCorrect.success) {
-            return NextResponse.json(
-                { error: isCorrect.error.flatten().fieldErrors },
-                { status: 400 }
-            )
-        }
+        
         const {
             ownerName,
             age,
             mobileNumber,
-        } = isCorrect.data;
+        } = body
 
         const userExist = await prisma.myVendor.findFirst({
             where: { mobileNumber }
         })
         if (userExist) {
+            console.log("user already exists")
+            
             return NextResponse.json(
                 { msg: "user already exist" },
                 { status: 411 }

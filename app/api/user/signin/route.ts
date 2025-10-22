@@ -1,8 +1,7 @@
-import { PrismaClient, Prisma } from "../../../generated/prisma/index.js"
+import {prisma} from "@/lib/prisma"
 import signinSchema from "../../../../library/validations/userValidation/singin.js"
 import { NextResponse } from "next/server.js"
 
-const prisma = new PrismaClient()
 
 export async function POST(req: Request) {
     try {
@@ -22,18 +21,20 @@ export async function POST(req: Request) {
         const userExists = await prisma.myUser.findFirst({
             where: {
                 mobileNumber: mobileNumber,
-                name: name
+                name:name
             }
         })
         if (!userExists) {
+            console.log("no user found. try signup")
             return NextResponse.json({
                 success: false,
                 verified: false,
                 msg: "No user found.Try to signup"
-            }, { status: 400 })
+            }, { status: 500 })
         }
         let verified = userExists.verified
         verified = true
+        console.log('user logged in successfully')
         return NextResponse.json({
             success: true,
             verified: true,
@@ -43,6 +44,7 @@ export async function POST(req: Request) {
                 status: 200
             })
     } catch (err) {
+        console.log("error in user signin route")
         return NextResponse.json({
             success: false,
             msg: "internal error in signin.js of User"
