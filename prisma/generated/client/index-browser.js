@@ -180,7 +180,8 @@ exports.Prisma.WorkScalarFieldEnum = {
   description: 'description',
   photos: 'photos',
   alternateNumber: 'alternateNumber',
-  workId: 'workId'
+  workId: 'workId',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.UserScalarFieldEnum = {
@@ -189,6 +190,8 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
+  mobileNumber: 'mobileNumber',
+  role: 'role',
   myUserId: 'myUserId',
   myVendorId: 'myVendorId',
   myWorkerId: 'myWorkerId'

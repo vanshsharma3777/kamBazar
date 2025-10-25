@@ -8,18 +8,22 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 
 export async function POST(req: Request) {
-    try {
-        const session = await getServerSession(authOptions)
+    const session = await getServerSession(authOptions)
         if (!session) {
             console.log("session not found")
             return NextResponse.json({
                 success: false,
-                msg: "worker session not found.try to signin first"
+                msg: "worker session not found.singin again"
             },
                 {
                     status: 400
                 })
         }
+        else{
+            console.log(session)
+        }
+    try {
+        
         const {
             mobileNumber,
             name,
@@ -38,7 +42,7 @@ export async function POST(req: Request) {
 
             } = await req.json()
             
-
+        
         
         
         const addDetails = await prisma.myWorker.update({

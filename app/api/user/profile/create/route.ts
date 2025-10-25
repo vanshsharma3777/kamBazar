@@ -1,22 +1,41 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function POST(req: Request) {
-    try {
+   const session= await getServerSession(authOptions)
+   if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+   console.log(session)
+   const userId = session.user.id 
+   
+   try {
+        
         const {
             mobileNumber,
             name,
             work,
-            address
+            address,
+            email
         }: {
             mobileNumber: string,
             name: string,
             address: string,
-            work: string[]
+            work: string[],
+            email:string
         } = await req.json()
-        console.log("here1")
-       
+        const user = await prisma.user.findFirst({
+            where:{email}
+        })
+        if(user){
+           return NextResponse.json({
+            msg:"User already exists"
+           }) 
+        }
         const response = await axios.post(`${process.env.BACKEND_URL}/api/user/signin`, { mobileNumber, name });
         console.log(response.data)
         console.log(response.data.verified)

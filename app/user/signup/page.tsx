@@ -25,7 +25,6 @@ export default function SignupForm() {
 
     const [formData, setFormData] = useState<FormDataType>({
         name: '',
-
         mobileNumber: ''
     });
 

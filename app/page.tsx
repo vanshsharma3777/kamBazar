@@ -1,15 +1,41 @@
 'use client'
 
+import axios from 'axios';
 import { User, Store, Wrench, LogOut, Sparkles } from 'lucide-react';
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
+interface Session {
+    user: {
+      id: string;          // <-- add this line
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    };
+  }
+
+   interface User {
+    sub: string;
+  }
 
 export default function Home() {
-  const handleNavigation = (path:string) => {
-    console.log(`Navigating to ${path}`);
-  };
+  const router = useRouter()
+  const [userData, setUserData] = useState<any>(null);
+  const {data: session , status} = useSession()
+  if(status==='unauthenticated'){
+    alert("Session expired please login again")
+   signIn()
+   return null
+  }
+  const handleNavigate = async (role : string)=>{
+     try {
+      router.push(`/${role}/create-profile`);
+    } catch (err) {
+      console.error("Failed to fetch user", err);
+    }
 
-  const handleLogout = () => {
-    console.log('Logging out...');
-  };
+  }
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 px-4">
@@ -27,7 +53,7 @@ export default function Home() {
               </span>
             </h1>
           </div>
-          
+
           <p className="text-xl font-semibold bg-gradient-to-r from-gray-700 to-gray-800 bg-clip-text text-transparent mb-2">
             Work Today, Earn Today
           </p>
@@ -46,7 +72,9 @@ export default function Home() {
         <div className="space-y-4 mb-6">
           {/* User Card */}
           <button
-            onClick={() => handleNavigation("/user/signup")}
+            onClick={()=>{
+              handleNavigate("user")
+            }}
             className="w-full bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100 group"
           >
             <div className="flex items-center gap-4">
@@ -65,7 +93,9 @@ export default function Home() {
 
           {/* Vendor Card */}
           <button
-            onClick={() => handleNavigation("/vendor/signup")}
+            onClick={()=>{
+              handleNavigate("vendor")
+            }}
             className="w-full bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100 group"
           >
             <div className="flex items-center gap-4">
@@ -84,7 +114,10 @@ export default function Home() {
 
           {/* Worker Card */}
           <button
-            onClick={() => handleNavigation("/worker/signup")}
+            onClick={()=>{
+              handleNavigate("worker")
+            }}
+            
             className="w-full bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100 group"
           >
             <div className="flex items-center gap-4">

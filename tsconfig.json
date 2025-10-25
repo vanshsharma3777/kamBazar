@@ -20,11 +20,11 @@
       }
     ],
     "paths": {
-      "@generated/client": ["prisma/generated/client"],
+      "@generated/client": ["./prisma/generated/client"],
       "@/*": ["./*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "library/validations/signup.js " , "types/**/*.d.ts", "next.config.js", "next.config.js"],
   
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules" , "prisma/generated" ] 
 }

@@ -1,18 +1,18 @@
 'use client'
 
-import { useState  , useEffect} from 'react';
-import { User, Phone, MapPin, Briefcase, Image, AlertCircle, CheckCircle, LogOut } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { User, Phone, MapPin, Briefcase, Image, AlertCircle, CheckCircle } from 'lucide-react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-type WorkDetails ={
-        userName:string
-        primaryContact:string,
-        alternateContact:string,
-        address:string,
-        workType:string,
-        workDescription:string,
-        photos:File[]
+type WorkDetails = {
+    userName: string
+    primaryContact: string,
+    alternateContact: string,
+    address: string,
+    workType: string,
+    workDescription: string,
+    photos: File[]
 }
 
 type ErrorsType = {
@@ -22,27 +22,27 @@ type ErrorsType = {
 console.log("get1")
 export default function PostWorkForm() {
     console.log("get2")
-    const router = useRouter() 
-    const { data:session , status} = useSession()
-    if(status==='unauthenticated'){
+    const router = useRouter()
+    const { data: session, status } = useSession()
+    if (status === 'unauthenticated') {
         alert("Session expired!! PLease login again")
         signIn('google')
     }
     useEffect(() => {
-      const saved = localStorage.getItem('profileData');
-      if (saved) {
-        const savedData =JSON.parse(saved)
-        formData.userName= savedData.name
-        formData.primaryContact= savedData.mobileNumber
-        formData.address= savedData.address
-      }
+        const saved = localStorage.getItem('profileData');
+        if (saved) {
+            const savedData = JSON.parse(saved)
+            formData.userName = savedData.name
+            formData.primaryContact = savedData.mobileNumber
+            formData.address = savedData.address
+        }
     }, []);
-    
+
     const [formData, setFormData] = useState<WorkDetails>({
-        userName: '', 
-        primaryContact: '', 
+        userName: '',
+        primaryContact: '',
         alternateContact: '',
-        address: '', 
+        address: '',
         workType: '',
         workDescription: '',
         photos: []
@@ -90,7 +90,7 @@ export default function PostWorkForm() {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleInputChange = (e:any) => {
+    const handleInputChange = (e: any) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
         if (errors[name]) {
@@ -99,61 +99,54 @@ export default function PostWorkForm() {
     };
 
     const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []) as File[];
-    if (formData.photos.length + files.length > 5) {
-        alert('You can upload maximum 5 photos');
-        return;
-    }
-    setFormData(prev => ({
-        ...prev,
-        photos: [...prev.photos, ...files]
-    }));
-};
+        const files = Array.from(e.target.files || []) as File[];
+        if (formData.photos.length + files.length > 5) {
+            alert('You can upload maximum 5 photos');
+            return;
+        }
+        setFormData(prev => ({
+            ...prev,
+            photos: [...prev.photos, ...files]
+        }));
+    };
 
-    const removePhoto = (index:any) => {
+    const removePhoto = (index: any) => {
         setFormData(prev => ({
             ...prev,
             photos: prev.photos.filter((_, i) => i !== index)
         }));
     };
-    
-    const logOutHandler =()=>{
-        console.log(session)
-        router.push('/')
-    }
 
-    const handleSubmit = async (e:any) => {
+
+
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
-        
+
         if (!validateForm()) {
             return;
         }
-        const response = await axios.post('/api/user/create-profile', formData)
-            if (!response) {
-                console.log("response not found")
-                alert("work not created")
-            }
-            if (response.data?.success) {
-                alert("work posted successfully")
-                
-            }
-            if (!response.data?.success) {
-                alert("Error!! work not posted")
-            }
+
         setShowConfirmation(true);
     };
 
     const confirmPost = async () => {
         try {
-            // Here you would make the API call
             console.log('Posting work:', formData);
-            
-            // Simulate API call
-            // const response = await axios.post('/api/work/create', formData);
-            
+
+            const response = await axios.post('/api/user/work/create', formData)
+            if (!response) {
+                console.log("response not found")
+                alert("work not created")
+            }
+            if (!response.data?.success) {
+                alert("Error!! work not posted")
+            }
+setTimeout(() => {
+    router.push('/user/dashboard')
+}, 1000);
             setShowConfirmation(false);
             setSubmitSuccess(true);
-            
+
             setTimeout(() => {
                 setFormData({
                     ...formData,
@@ -186,14 +179,6 @@ export default function PostWorkForm() {
                                     <p className="text-indigo-100 mt-1">Connect with skilled workers</p>
                                 </div>
                             </div>
-                            <button
-                                onClick={logOutHandler}
-                                className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl transition backdrop-blur-sm"
-                                title="Logout"
-                            >
-                                <LogOut className="w-5 h-5" />
-                                <span className="font-semibold">Logout</span>
-                            </button>
                         </div>
                     </div>
 
@@ -242,7 +227,7 @@ export default function PostWorkForm() {
                             <div>
                                 <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
                                     <Phone className="w-4 h-4 mr-2 text-indigo-600" />
-                                    Alternate Contact Number (Emergency) 
+                                    Alternate Contact Number (Emergency)
                                 </label>
                                 <input
                                     type="tel"
@@ -276,11 +261,10 @@ export default function PostWorkForm() {
                                                 setFormData(prev => ({ ...prev, workType: type.value }));
                                                 setErrors(prev => ({ ...prev, workType: '' }));
                                             }}
-                                            className={`p-4 rounded-xl border-2 transition-all ${
-                                                formData.workType === type.value
+                                            className={`p-4 rounded-xl border-2 transition-all ${formData.workType === type.value
                                                     ? 'border-indigo-600 bg-indigo-50 shadow-md'
                                                     : 'border-gray-200 hover:border-indigo-300 hover:bg-gray-50'
-                                            }`}
+                                                }`}
                                         >
                                             <div className="text-3xl mb-2">{type.icon}</div>
                                             <div className="text-sm font-medium text-gray-700">{type.label}</div>
@@ -345,7 +329,7 @@ export default function PostWorkForm() {
                                         <p className="text-sm text-gray-500 mt-1">PNG, JPG up to 5 images</p>
                                     </label>
                                 </div>
-                                
+
                                 {formData.photos.length > 0 && (
                                     <div className="mt-4 grid grid-cols-3 gap-3">
                                         {formData.photos.map((photo, index) => (
