@@ -1,73 +1,73 @@
 import { NextResponse } from "next/server";
-import {prisma} from "@/lib/prisma";
-import { date, success } from "zod";
-import axios from "axios";
+import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { verifyToken } from "@/library/jwt";
+import { MobileInstance } from "twilio/lib/rest/api/v2010/account/availablePhoneNumberCountry/mobile";
+import { da } from "zod/locales";
 
 export async function POST(req: Request) {
-    try {
-        const session = await getServerSession(authOptions)
-                if (!session) {
-                    console.log("session not found")
-                    return NextResponse.json({
-                        success: false,
-                        msg: "worker session not found.try to signin first"
-                    },
-                        {
-                            status: 400
-                        })
-                }
-
-        const {
-            mobileNumber,
-            ownerName,
-            address,
-            shopName,
-            email,
-            password,
-            age,
-
-
-        }: {
-            mobileNumber: string,
-            ownerName: string,
-            address: string,
-            shopName: string,
-            email: string,
-            password: string,
-            age: number,
-
-        } = await req.json()
-       
-
-        const addDetails = await prisma.myVendor.update({
-            where: { mobileNumber: mobileNumber },
+    
+         try {
+            const authHeader = req.headers.get('authorization')
+    console.log("authorisation:", authHeader)
+    const token = authHeader?.split(" ")[1];
+    console.log("token :", token)
+    
+        console.log("TOKEN IS " , token)
+        if (!token || token === 'null' || token === 'undefined') {
+            console.log("here")
+            return NextResponse.json(
+                {
+                    msg: "token not found. singin again",
+                    valid: false
+                }, { status: 400 }
+            )
+        }
+        console.log(token)
+        const body = await req.json()
+        const decoded = await verifyToken(token);
+        if (!decoded) {
+            return NextResponse.json({
+                msg: "token not verified",
+                valid: false
+            }, { status: 400 })
+        }
+        const data = {
+            mobileNumber: body.mobileNumber,
+            ownerName: body.ownerName,
+            address: body.address,
+            shopName: body.shopName,
+            bussinessType:body.bussinessType,
+            age: body.age,
+        }
+        console.log(data)
+        const id = decoded.id
+        const worker = await prisma.myVendor.update({
+            where: { id },
             data: {
-                address,
-                shopName,
-                email,
-                password,
-                age,
-                ownerName,
+                mobileNumber: body.mobileNumber,
+                ownerName: body.ownerName,
+                address: body.address,
+                shopName: body.shopName,
+                age: body.age,
+                bussinessType:body.bussinessType
             }
         })
-        console.log("profile updated suceesffuly")
-        return NextResponse.json({
-            success: true,
-            msg: "vendor profile updated successfully!",
-            addDetails: addDetails
-        })
-
-    } catch (error: any) {
-         console.error('API Error Details in vendoor profile creation:', {
-            message: error.message,
-            stack: error.stack,
-            name: error.name
-        })
+        console.log("decoded : ", decoded)
+        return NextResponse.json(
+            {
+                msg: "vendor created successfully",
+                decoded: decoded,
+                profileCreated: worker,
+                valid: true
+            }
+        )
+    } catch (err: any) {
+        console.log("error:", err.message)
         return NextResponse.json({
             success: false,
-            error: error.message,
+            error: err.message,
             msg: "Internal error in profile creation of vendor"
         }, { status: 500 })
     }

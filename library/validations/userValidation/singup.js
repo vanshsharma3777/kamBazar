@@ -1,12 +1,13 @@
 import { z } from "zod";
 
 const signupSchema = z.object({
-  name: z
-    .string({ message: "Name is required" })
-    .min(2, "Name must be at least 2 characters"),
-  mobileNumber: z
-    .string({ message: "Mobile number is required" })
-    .regex(/^[0-9]{10}$/, "Mobile number must be 10 digits"),
+   password: z.string().min(6, "Password must be at least 6 characters"),
+  email: z
+    .string({ message: "Email is required" })
+    .email("Invalid email format")
+    .refine((val) => val.endsWith("@gmail.com"), {
+      message: "Email must end with @gmail.com",
+    })
 });
 
 export default signupSchema

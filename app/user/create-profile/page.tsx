@@ -8,19 +8,15 @@ import { useRouter } from 'next/navigation';
 
 type FormDataType = {
     name: string;
-    email: string;
+    
     mobileNumber: string;
-    age: number;
-    work: string[];
+    
     address: string;
-    isActive: boolean;
+   
     profilePhoto: File | null;
 };
 
-type Data = {
-    name: string,
-    mobileNumber: string
-}
+
 
 type ErrorsType = {
     [key: string]: string;
@@ -28,38 +24,22 @@ type ErrorsType = {
 
 
 export default function WorkerProfileForm() {
+    useEffect(() => {
+        const token = localStorage.getItem("token")
+        if (!token) {
+            alert("Session expired. Please login again")
+            router.push("/user/signin")
+            return
+        }
+    }, [])
     const router = useRouter()
-    const { data: session, status } = useSession()
-    useEffect(() => {
-        if (status === 'unauthenticated') {
-            signIn('google')
-        }
-    }, [status])
-    const [savedData, setSavedData] = useState<Data>({
-        name: '',
-        mobileNumber: ''
-    })
-    useEffect(() => {
-        const saved = localStorage.getItem('userSignupData');
-        if (saved) {
-            const data = JSON.parse(saved)      
-            setSavedData((prev) => ({ ...prev, name: data.name }))
-            setSavedData((prev) => ({ ...prev, mobileNumber: data.mobileNumber }))
-            setFormData((prev) => ({ ...prev, mobileNumber: data.mobileNumber }))
-            setFormData((prev) => ({ ...prev, name: data.name }))
-        }
-    }, []);
-
-
     const [formData, setFormData] = useState<FormDataType>({
         mobileNumber: "",
         name: '',
-        email: '',
-        work: [],
+        
         address: '',
-        isActive: true,
+    
         profilePhoto: null,
-        age: 0
     });
 
     const [errors, setErrors] = useState<ErrorsType>({});
@@ -68,7 +48,7 @@ export default function WorkerProfileForm() {
     const validateForm = () => {
         const newErrors: any = {};
 
-     {/*}   // Mobile Number validation
+        // Mobile Number validation
         if (!formData.mobileNumber.trim()) {
             newErrors.mobileNumber = 'Mobile number is required';
         } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
@@ -81,14 +61,8 @@ export default function WorkerProfileForm() {
         } else if (formData.name.trim().length < 2) {
             newErrors.name = 'Name must be at least 2 characters long';
         }
-     */}
 
-        //email validation
-        if (!formData.email.trim()) {
-            newErrors.email = 'Email is required';
-        } else if (formData.email.trim().length < 5) {
-            newErrors.email = 'Name must be at least 5 characters long';
-        }
+
 
 
         // Address validation
@@ -102,16 +76,6 @@ export default function WorkerProfileForm() {
             newErrors.profilePhoto = 'Profile photo is required';
         }
 
-        // Age validation
-        if (!formData.age) {
-            newErrors.age = 'Age is required';
-        } else if (isNaN(Number(formData.age)) || Number(formData.age) <= 0) {
-            newErrors.age = 'Please enter a valid positive number for age';
-        } else if (Number(formData.age) < 18) {
-            newErrors.age = 'Age must be at least 18 years';
-        } else if (Number(formData.age) > 68) {
-            newErrors.age = 'Worker age should be less than 68 years';
-        }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -126,65 +90,49 @@ export default function WorkerProfileForm() {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        setSubmitSuccess(false);
-        try {
-            const ageInNumber = Number(formData.age)
-            formData.age = ageInNumber
-            const response = await axios.post('/api/user/profile/create', savedData)
-            if (!response) {
-                console.log("response not found")
-                alert("profile not created")
-            }
-            if(!(formData.name === savedData.name) || !(formData.mobileNumber === savedData.mobileNumber)){
-                alert("Enter the name and mobile number used while signin")
-            }
-            if (response.data?.success && formData.name === savedData.name && formData.mobileNumber === savedData.mobileNumber ) {
-                localStorage.setItem('profileData', JSON.stringify(formData));
-                setTimeout(() => {
-                    router.push('/user/create-work');
-                }, 1000);
-            }
-            if (!response.data?.success) {
-                alert("Error!! profile not created")
-            }
-
-
-        } catch (err: any) {
-            if (err.messgae === 'Request failed with status code 500') {
-                alert("No user found!! Create new account")
-            }
-            else {
-                console.log("error in profile creation of user", err.message)
-                alert("Internal error. Please try after sometime")
-            }
-
+        if(!validateForm()){
+            return
         }
-
-        if (validateForm()) {
-            //console.log('Form submitted successfully:', formData);
-            setSubmitSuccess(true);
-            // Reset form after successful submission
-            setTimeout(() => {
+        try {
+            const token = localStorage.getItem("token")
+            const response = await axios.post('/api/user/profile/create', formData, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            })
+            console.log(response)
+             if (response.data.valid===true) {
+                localStorage.setItem('userData' , response.data.userId)
+                console.log(response)
+                setSubmitSuccess(true)
+                setTimeout(() => {
                 setFormData({
                     mobileNumber: '',
                     name: '',
                     address: '',
                     profilePhoto: null,
-                    email: '',
-                    isActive: true,
-                    work: [],
-                    age: 0
                 });
                 setSubmitSuccess(false);
             }, 2000);
-            setTimeout(() => {
-                setSavedData({
-                    mobileNumber: '',
-                    name: '',
-                });
-                setSubmitSuccess(false);
-            }, 2000);
+                router.push("/user/home")
+            }
+            
+
+        } catch (err: any) {
+            console.log("error in profile creation of user", err.message)
+            if(err.response?.status==400){
+                alert("Session expired. Please login again")
+            } else if(err.response?.status==404){
+                alert("User not found.")
+                router.push('/user/signin')
+            }
+            
+            else{
+                alert("internal error in profile creation of user")
+            }
         }
+
     };
 
     return (
@@ -215,12 +163,12 @@ export default function WorkerProfileForm() {
                             <input
                                 type="text"
                                 name="name"
-                                value={savedData.name}
+                                value={formData.name}
                                 onChange={handleInputChange}
                                 className={`w-full px-4 py-3 text-gray-600 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition`}
                                 placeholder="Enter full name"
                             />
-                          {/*  {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}  */}
+                            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                         </div>
 
                         {/* Mobile Number */}
@@ -232,55 +180,15 @@ export default function WorkerProfileForm() {
                             <input
                                 type="tel"
                                 name="mobileNumber"
-                                value={savedData.mobileNumber}
+                                value={formData.mobileNumber}
                                 onChange={handleInputChange}
                                 className={`w-full px-4 py-3 text-gray-600 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition`}
                                 placeholder="Enter 10-digit mobile number"
                                 maxLength={10}
                             />
-                         {/*   {errors.mobileNumber && <p className="text-red-500 text-sm mt-1">{errors.mobileNumber}</p>}  */}
+                            {errors.mobileNumber && <p className="text-red-500 text-sm mt-1">{errors.mobileNumber}</p>}
                         </div>
 
-
-
-
-                        {/*/ email  */}
-                        <div>
-                            <label className="flex items-center text-sm font-medium text-black mb-2">
-                                <Mail className="w-4 h-4 mr-2" />
-                                Email  <span className="text-red-500 ml-1">*</span>
-                            </label>
-                            <input
-                                type="text"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleInputChange}
-                                className={`w-full px-4 py-3 text-gray-600 border  ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition`}
-                                placeholder="Enter your email "
-                            />
-                            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-                        </div>
-
-
-
-
-                        {/* Age */}
-                        <div>
-                            <label className="flex items-center text-sm font-medium text-black mb-2">
-                                <Calendar className="w-4 h-4 mr-2" />
-                                Age <span className="text-red-500 ml-1">*</span>
-                            </label>
-                            <input
-                                type="number"
-                                name="age"
-                                value={formData.age}
-                                onChange={handleInputChange}
-                                className={`w-full px-4 py-3 text-gray-600 border ${errors.age ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition`}
-                                placeholder="Enter age"
-                                min="0"
-                            />
-                            {errors.age && <p className="text-red-500 text-sm mt-1">{errors.age}</p>}
-                        </div>
 
                         {/* Address */}
                         <div>
@@ -326,7 +234,8 @@ export default function WorkerProfileForm() {
                         </div>
 
                         {/* Submit Button */}
-                        <button
+                        <button 
+                        onClick={handleSubmit}
                             type="submit"
                             className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 px-6 rounded-lg transition duration-200 transform hover:scale-105 shadow-lg"
                         >

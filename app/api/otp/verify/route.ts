@@ -1,9 +1,8 @@
 import redis from "@/lib/redis";
-import { PrismaClient } from '../../../../app/generated/prisma/index.js'
+import { prisma} from '@/lib/prisma'
 import { NextResponse } from "next/server";
 import { success } from "zod";
 import { Message } from "twilio/lib/twiml/MessagingResponse.js";
-const prisma = new PrismaClient();
 
 
 async function POST(req: Request) {

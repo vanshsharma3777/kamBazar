@@ -1,52 +1,57 @@
-import { prisma } from "@/lib/prisma";
-import  singupSchema from '../../../../library/validations/workerValidation/signup.js'
+import singupSchema from '../../../../library/validations/userValidation/singup.js'
 import { NextResponse } from "next/server";
-import { success } from "zod";
-export  async function POST(req: Request) {
+import bcrypt from "bcryptjs";
+import { signToken } from "@/library/jwt";
+import { prisma } from '@/lib/prisma'
+import { success } from 'zod';
+export async function POST(req: Request) {
     try {
         const body = await req.json()
         const isCorrect = singupSchema.safeParse(body);
         if (!isCorrect.success) {
-            console.log("error in enteries")
+            console.log("error in zod inputs of user")
             return NextResponse.json(
                 { error: isCorrect.error.flatten().fieldErrors },
                 { status: 400 }
             )
         }
         const {
-            name,
-            mobileNumber,
-            age,
+            password,
+            email,
         } = isCorrect.data;
-
-        const userExist = await prisma.myWorker.findFirst({
-            where: { mobileNumber }
+        console.log("email:" , email)
+        const userExist = await prisma.myWorker.findUnique({
+            where: { email }
         })
         if (userExist) {
             return NextResponse.json(
-                { msg: "user already exist" },
-                { status: 411 }
+                { msg: "worker already exist.Please signin" },
+                { status: 404 }
             )
         }
-
+        
+        const hasedPassword = await bcrypt.hash(password , 10 )
         const user = await prisma.myWorker.create({
             data: {
-                name,
-                mobileNumber,
-                age,
+                password : hasedPassword,
+                email,
             }
         })
-        user.verified = true;
-
+        
+        const token = await signToken({ 
+            id:user.id,
+            email : user.email
+        } )
+        
         return NextResponse.json({
-            msg: "user created succesfully.",
+            msg: "Worker created succesfully.",
             user: user,
+            token : token,
             success:true
-        },
-            { status: 201 }
+        }
         )
     }
-    catch (err:any) {
+    catch (err: any) {
         console.log("signup error: ", err.message)
         return NextResponse.json({
             msg: "signup internal server error.",

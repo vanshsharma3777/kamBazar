@@ -1,4 +1,4 @@
-import { PrismaClient } from "../../../prisma/generated/client/index"
+import { PrismaClient } from "../../../prisma/generated/client"
 
 declare global {
   // eslint-disable-next-line no-var
@@ -7,7 +7,7 @@ declare global {
 
  export const prisma =
   global.prisma ||
-  new PrismaClient({
+  new PrismaClient({ 
     log: ["query"], // optional: logs all queries
   });
 

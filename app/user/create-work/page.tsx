@@ -53,7 +53,6 @@ export default function PostWorkForm() {
     const [submitSuccess, setSubmitSuccess] = useState(false);
 
     const workTypes = [
-        { value: 'furniture', label: 'Furniture Work', icon: '🪑' },
         { value: 'painting', label: 'Painting Work', icon: '🎨' },
         { value: 'electrical', label: 'Electrical Work', icon: '⚡' },
         { value: 'plumbing', label: 'Plumbing Work', icon: '🔧' },

@@ -1,44 +1,56 @@
-import {prisma} from "@/lib/prisma"
-import signinSchema from "../../../../library/validations/userValidation/singin.js"
+import { prisma } from "@/lib/prisma"
+import signupSchema from "../../../../library/validations/userValidation/singup.js"
 import { NextResponse } from "next/server.js"
+import bcrypt from "bcryptjs"
+import { signToken } from "@/library/jwt"
+import { success } from "zod"
+import { getuid } from "process"
 
 
 export async function POST(req: Request) {
     try {
         const body = await req.json()
-        const isCorrect = signinSchema.safeParse(body)
-        if (!isCorrect.success) {
-            return NextResponse.json({
-                success: false,
-                verified: false,
-                error: isCorrect.error.flatten().fieldErrors
-            },
-                {
-                    status: 400
-                })
-        }
-        const { mobileNumber, name } = isCorrect.data
-        const userExists = await prisma.myUser.findFirst({
+        
+        const { email, password } = body
+        console.log(email)
+        const getUser = await prisma.myUser.findUnique({
             where: {
-                mobileNumber: mobileNumber,
-                name:name
+                email: email,
             }
         })
-        if (!userExists) {
+        
+        if (!getUser) {
             console.log("no user found. try signup")
             return NextResponse.json({
                 success: false,
                 verified: false,
                 msg: "No user found.Try to signup"
-            }, { status: 500 })
+            }, { status: 404 })
         }
-        let verified = userExists.verified
-        verified = true
-        console.log('user logged in successfully')
+        if (!getUser?.password) {
+            throw new Error("User password not found");
+        }
+     
+         const hasedPassword = getUser?.password as string
+       
+        const verify = await bcrypt.compare(password , hasedPassword)
+        
+        if (!verify) {
+            
+            return NextResponse.json({ msg: "Invalid credentials" , success:false }, { status: 401 });
+        }
+        console.log("token got ?")
+        const token = signToken({
+            email: getUser.email,
+            id: getUser.id
+        })     
+        console.log("YESD")
+    
         return NextResponse.json({
-            success: true,
-            verified: true,
-            msg: "User Login successfully!"
+            token,
+            msg: "User Login successfully!",
+            success:true,
+            valid:true
         },
             {
                 status: 200

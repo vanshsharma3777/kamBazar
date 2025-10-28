@@ -93,7 +93,6 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 });
 
 exports.Prisma.MyWorkerScalarFieldEnum = {
-  id: 'id',
   name: 'name',
   mobileNumber: 'mobileNumber',
   profilePhoto: 'profilePhoto',
@@ -109,11 +108,13 @@ exports.Prisma.MyWorkerScalarFieldEnum = {
   age: 'age',
   verified: 'verified',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  id: 'id',
+  email: 'email',
+  password: 'password'
 };
 
 exports.Prisma.MyVendorScalarFieldEnum = {
-  id: 'id',
   ownerName: 'ownerName',
   mobileNumber: 'mobileNumber',
   profilePhoto: 'profilePhoto',
@@ -129,11 +130,11 @@ exports.Prisma.MyVendorScalarFieldEnum = {
   verified: 'verified',
   age: 'age',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  id: 'id'
 };
 
 exports.Prisma.MyUserScalarFieldEnum = {
-  id: 'id',
   name: 'name',
   mobileNumber: 'mobileNumber',
   profilePhoto: 'profilePhoto',
@@ -143,7 +144,9 @@ exports.Prisma.MyUserScalarFieldEnum = {
   isActive: 'isActive',
   address: 'address',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  id: 'id',
+  password: 'password'
 };
 
 exports.Prisma.WorkScalarFieldEnum = {
@@ -154,41 +157,6 @@ exports.Prisma.WorkScalarFieldEnum = {
   alternateNumber: 'alternateNumber',
   workId: 'workId',
   createdAt: 'createdAt'
-};
-
-exports.Prisma.UserScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  email: 'email',
-  emailVerified: 'emailVerified',
-  image: 'image',
-  mobileNumber: 'mobileNumber',
-  role: 'role',
-  myUserId: 'myUserId',
-  myVendorId: 'myVendorId',
-  myWorkerId: 'myWorkerId'
-};
-
-exports.Prisma.AccountScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  type: 'type',
-  provider: 'provider',
-  providerAccountId: 'providerAccountId',
-  refresh_token: 'refresh_token',
-  access_token: 'access_token',
-  expires_at: 'expires_at',
-  token_type: 'token_type',
-  scope: 'scope',
-  id_token: 'id_token',
-  session_state: 'session_state'
-};
-
-exports.Prisma.SessionScalarFieldEnum = {
-  id: 'id',
-  sessionToken: 'sessionToken',
-  userId: 'userId',
-  expires: 'expires'
 };
 
 exports.Prisma.SortOrder = {
@@ -211,10 +179,7 @@ exports.Prisma.ModelName = {
   MyWorker: 'MyWorker',
   MyVendor: 'MyVendor',
   MyUser: 'MyUser',
-  Work: 'Work',
-  User: 'User',
-  Account: 'Account',
-  Session: 'Session'
+  Work: 'Work'
 };
 /**
  * Create the Client
@@ -264,13 +229,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\n//\n// ====== Your existing models ======\n//\nmodel MyWorker {\n  id           String   @id @default(uuid())\n  name         String?  @db.VarChar(50)\n  mobileNumber String?  @unique @db.VarChar(10)\n  profilePhoto String?  @default(\"\")\n  photo        String?  @default(\"\")\n  video        String?  @default(\"\")\n  dailyWage    Float?   @default(0)\n  address      String?  @db.VarChar(255)\n  rating       Float?   @default(0)\n  occupation   String?  @default(\"\")\n  feedback     String?  @default(\"\")\n  pastDeals    String[]\n  presentDeals String[]\n  age          Int?\n  verified     Boolean  @default(false)\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n  User         User[]\n}\n\nmodel MyVendor {\n  id            String   @id @default(uuid())\n  ownerName     String?  @db.VarChar(50)\n  mobileNumber  String?  @unique @db.VarChar(10)\n  profilePhoto  String?  @default(\"\")\n  shopName      String?  @db.VarChar(100)\n  shopPhoto     String?  @default(\"\")\n  email         String?  @db.VarChar(50)\n  password      String?  @default(\"\")\n  address       String?  @db.VarChar(255)\n  rating        Float?   @default(0)\n  bussinessType String?  @default(\"\")\n  feedback      String?  @default(\"\")\n  gstNumber     String?  @db.VarChar(20)\n  verified      Boolean  @default(false)\n  age           Int?\n  createdAt     DateTime @default(now())\n  updatedAt     DateTime @updatedAt\n  User          User[]\n}\n\nmodel MyUser {\n  id           String   @id @default(uuid())\n  name         String?  @db.VarChar(50)\n  mobileNumber String?  @unique @db.VarChar(10)\n  profilePhoto String?  @default(\"\")\n  work         String[]\n  email        String?\n  verified     Boolean  @default(false)\n  isActive     Boolean  @default(true)\n  address      String?  @default(\"\")\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n  User         User[]\n  works        Work[]\n}\n\nmodel Work {\n  id              String   @id @default(uuid())\n  workType        String\n  description     String\n  photos          String[]\n  alternateNumber String?\n  workId          String\n  user            MyUser   @relation(fields: [workId], references: [id])\n  createdAt       DateTime @default(now())\n}\n\nmodel User {\n  id            String    @id @default(uuid())\n  name          String?\n  email         String?\n  emailVerified DateTime?\n  image         String?\n  mobileNumber  String?   @unique\n  accounts      Account[]\n  session       Session[]\n  role          String?\n  myUserId      String?\n  myUser        MyUser?   @relation(fields: [myUserId], references: [id], onDelete: Cascade)\n\n  myVendorId String?\n  myVendor   MyVendor? @relation(fields: [myVendorId], references: [id], onDelete: Cascade)\n\n  myWorkerId String?\n  myWorker   MyWorker? @relation(fields: [myWorkerId], references: [id], onDelete: Cascade)\n}\n\nmodel Account {\n  id                String  @id @default(cuid())\n  userId            String\n  type              String\n  provider          String\n  providerAccountId String\n  refresh_token     String? @db.Text\n  access_token      String? @db.Text\n  expires_at        Int?\n  token_type        String?\n  scope             String?\n  id_token          String? @db.Text\n  session_state     String?\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([provider, providerAccountId])\n}\n\nmodel Session {\n  id           String   @id @default(cuid())\n  sessionToken String   @unique\n  userId       String\n  expires      DateTime\n  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n",
-  "inlineSchemaHash": "a2fc489b9ab6f7b03ed7f561429a58b505f744dd90ebf0fa6485c758998700b9",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel MyWorker {\n  name         String?  @db.VarChar(50)\n  mobileNumber String?  @db.VarChar(10)\n  profilePhoto String?  @default(\"\")\n  photo        String?  @default(\"\")\n  video        String?  @default(\"\")\n  dailyWage    Float?   @default(0)\n  address      String?  @db.VarChar(255)\n  rating       Float?   @default(0)\n  occupation   String?  @default(\"\")\n  feedback     String?  @default(\"\")\n  pastDeals    String[]\n  presentDeals String[]\n  age          Int?\n  verified     Boolean  @default(false)\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n  id           String   @id @default(uuid())\n  email        String   @unique\n  password     String   @default(\"\")\n}\n\nmodel MyVendor {\n  ownerName     String?  @db.VarChar(50)\n  mobileNumber  String?  @db.VarChar(10)\n  profilePhoto  String?  @default(\"\")\n  shopName      String?  @db.VarChar(100)\n  shopPhoto     String?  @default(\"\")\n  email         String?  @unique @db.VarChar(50)\n  password      String?  @default(\"\")\n  address       String?  @db.VarChar(255)\n  rating        Float?   @default(0)\n  bussinessType String?  @default(\"\")\n  feedback      String?  @default(\"\")\n  gstNumber     String?  @db.VarChar(20)\n  verified      Boolean  @default(false)\n  age           Int?\n  createdAt     DateTime @default(now())\n  updatedAt     DateTime @updatedAt\n  id            String   @id @default(uuid())\n}\n\nmodel MyUser {\n  name         String?  @db.VarChar(50)\n  mobileNumber String?  @db.VarChar(10)\n  profilePhoto String?  @default(\"\")\n  work         String[]\n  email        String?  @unique\n  verified     Boolean  @default(false)\n  isActive     Boolean  @default(true)\n  address      String?  @default(\"\")\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n  id           String   @id @default(uuid())\n  password     String   @default(\"\")\n  works        Work[]\n}\n\nmodel Work {\n  id              String   @id @default(uuid())\n  workType        String\n  description     String\n  photos          String[]\n  alternateNumber String?\n  workId          String\n  createdAt       DateTime @default(now())\n  user            MyUser   @relation(fields: [workId], references: [id])\n}\n",
+  "inlineSchemaHash": "f3f2741d25beb8ea0ea36007ae4bda1b5d55bde834d78463683cdd25a1c523dd",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"MyWorker\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mobileNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"profilePhoto\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"photo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"video\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"dailyWage\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"address\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"rating\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"occupation\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"feedback\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"pastDeals\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"presentDeals\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"age\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"verified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"User\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"MyWorkerToUser\"}],\"dbName\":null},\"MyVendor\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ownerName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mobileNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"profilePhoto\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"shopName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"shopPhoto\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"address\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"rating\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"bussinessType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"feedback\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"gstNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"verified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"age\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"User\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"MyVendorToUser\"}],\"dbName\":null},\"MyUser\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mobileNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"profilePhoto\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"work\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"verified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"address\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"User\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"MyUserToUser\"},{\"name\":\"works\",\"kind\":\"object\",\"type\":\"Work\",\"relationName\":\"MyUserToWork\"}],\"dbName\":null},\"Work\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"workType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"photos\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"alternateNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"workId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"MyUser\",\"relationName\":\"MyUserToWork\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"emailVerified\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mobileNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accounts\",\"kind\":\"object\",\"type\":\"Account\",\"relationName\":\"AccountToUser\"},{\"name\":\"session\",\"kind\":\"object\",\"type\":\"Session\",\"relationName\":\"SessionToUser\"},{\"name\":\"role\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"myUserId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"myUser\",\"kind\":\"object\",\"type\":\"MyUser\",\"relationName\":\"MyUserToUser\"},{\"name\":\"myVendorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"myVendor\",\"kind\":\"object\",\"type\":\"MyVendor\",\"relationName\":\"MyVendorToUser\"},{\"name\":\"myWorkerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"myWorker\",\"kind\":\"object\",\"type\":\"MyWorker\",\"relationName\":\"MyWorkerToUser\"}],\"dbName\":null},\"Account\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"provider\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"providerAccountId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"refresh_token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"access_token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expires_at\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"token_type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"scope\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"id_token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"session_state\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AccountToUser\"}],\"dbName\":null},\"Session\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sessionToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expires\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"SessionToUser\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"MyWorker\":{\"fields\":[{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mobileNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"profilePhoto\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"photo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"video\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"dailyWage\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"address\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"rating\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"occupation\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"feedback\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"pastDeals\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"presentDeals\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"age\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"verified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"MyVendor\":{\"fields\":[{\"name\":\"ownerName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mobileNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"profilePhoto\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"shopName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"shopPhoto\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"address\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"rating\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"bussinessType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"feedback\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"gstNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"verified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"age\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"MyUser\":{\"fields\":[{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mobileNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"profilePhoto\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"work\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"verified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"address\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"works\",\"kind\":\"object\",\"type\":\"Work\",\"relationName\":\"MyUserToWork\"}],\"dbName\":null},\"Work\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"workType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"photos\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"alternateNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"workId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"MyUser\",\"relationName\":\"MyUserToWork\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

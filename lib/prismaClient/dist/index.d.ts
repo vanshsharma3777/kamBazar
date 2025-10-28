@@ -1,6 +1,6 @@
-import { PrismaClient } from "../../../app/generated/prisma/index.js";
+import { PrismaClient } from "../../../prisma/generated/client";
 declare global {
     var prisma: PrismaClient | undefined;
 }
-export declare const prisma: PrismaClient<import("../../../app/generated/prisma/index.js").Prisma.PrismaClientOptions, never, import("../../../app/generated/prisma/runtime/library.js").DefaultArgs>;
+export declare const prisma: PrismaClient<import("../../../prisma/generated/client").Prisma.PrismaClientOptions, never, import("../../../prisma/generated/client/runtime/library").DefaultArgs>;
 //# sourceMappingURL=index.d.ts.map

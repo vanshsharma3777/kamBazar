@@ -1,71 +1,76 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import axios from "axios";
-import { useSession } from "next-auth/react";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { verifyToken } from "@/library/jwt";
+import { MobileInstance } from "twilio/lib/rest/api/v2010/account/availablePhoneNumberCountry/mobile";
 
 export async function POST(req: Request) {
-   const session= await getServerSession(authOptions)
-   if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-   console.log(session)
-   const userId = session.user.id 
-   
-   try {
-        
-        const {
-            mobileNumber,
-            name,
-            work,
-            address,
-            email
-        }: {
-            mobileNumber: string,
-            name: string,
-            address: string,
-            work: string[],
-            email:string
-        } = await req.json()
-        const user = await prisma.user.findFirst({
-            where:{email}
-        })
-        if(user){
-           return NextResponse.json({
-            msg:"User already exists"
-           }) 
-        }
-        const response = await axios.post(`${process.env.BACKEND_URL}/api/user/signin`, { mobileNumber, name });
-        console.log(response.data)
-        console.log(response.data.verified)
-        if (!response.data.verified) {
-            return NextResponse.json({
-                success: false,
-                msg: "User not verified"
-            },
+
+    try {
+        const authHeader = req.headers.get('authorization')
+        console.log("authorisation:", authHeader)
+        const token = authHeader?.split(" ")[1];
+        console.log("token :", token)
+
+        if (!token || token === 'null' || token === 'undefined') {
+            console.log("Token not found or invalid")
+            return NextResponse.json(
                 {
-                    status: 400
-                })
+                    msg: "Token not found. Please sign in again",
+                    valid: false
+                }, { status: 400 }
+            )
         }
 
-        const addDetails = await prisma.myUser.update({
-            where: { mobileNumber: mobileNumber },
-            data: {
-                address,
-                work,
-                name,
-                mobileNumber,
+        const body = await req.json()
+        const decoded = await verifyToken(token);
+        if (!decoded) {
+            return NextResponse.json({
+                msg: "token not verified",
+                valid: false
+            }, { status: 400 })
+        }
+        
+        const data = {
+            mobileNumber: body.mobileNumber,
+            name: body.name,
+            address: body.address,
+        }
+        const id = decoded.id
+        console.log("id: ", id)
+        const isWorkerExists = await prisma.myUser.findFirst({
+            where:{
+                id:id
             }
         })
-        return NextResponse.json({
-            success: true,
-            msg: "User profile updated successfully!",
-            addDetails: addDetails
-        })
+        console.log("isWorkerExists :" , isWorkerExists)
+        if(!isWorkerExists){
+            console.log("working")
+            return NextResponse.json({
+                valid:false,
+                msg:"Worker did not exists in record"
+            } , {status:404})
+        }
+        const user = await prisma.myUser.update({
+            where: { id },
+            data: {
+                mobileNumber: body.mobileNumber,
+                name: body.name,
+                address: body.address,
 
+            }
+        })
+        console.log("decoded : ", decoded)
+        return NextResponse.json(
+            {
+                msg: "User created successfully",
+                userId:id,
+                valid: true
+            }
+        )
     } catch (err: any) {
-        console.log("error:",err.message)
+        console.log("error:", err.message)
         return NextResponse.json({
             success: false,
             error: err.message,

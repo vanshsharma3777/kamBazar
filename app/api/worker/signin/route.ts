@@ -1,51 +1,59 @@
-import {prisma} from "@/lib/prisma"
-import signinSchema from "../../../../library/validations/workerValidation/signin.js"
+import { prisma } from "@/lib/prisma"
+import signupSchema from "../../../../library/validations/userValidation/singup.js"
 import { NextResponse } from "next/server.js"
-import { use } from "react"
+import bcrypt from "bcryptjs"
+import { signToken } from "@/library/jwt"
+import { success } from "zod"
 
 
 export async function POST(req: Request) {
     try {
         const body = await req.json()
-        const isCorrect = signinSchema.safeParse(body)
+        const isCorrect = signupSchema.safeParse(body)
         if (!isCorrect.success) {
             return NextResponse.json({
                 success: false,
+                verified: false,
                 error: isCorrect.error.flatten().fieldErrors
             },
                 {
                     status: 400
                 })
         }
-        const { mobileNumber, name } = isCorrect.data
-        const worker = await  prisma.myWorker.findUnique({
-            where:{mobileNumber}
-        })
-        let verified = worker?.verified
-        const userExists =await prisma.myWorker.findFirst({
+        const { email, password } = isCorrect.data
+        const userExists = await prisma.myWorker.findFirst({
             where: {
-                mobileNumber: mobileNumber,
-                name: name
+                email: email,
+                password: password
             }
         })
-
         if (!userExists) {
+            console.log("no worker found. try to signup")
             return NextResponse.json({
-                success: false,
-                msg: "No user found.Try to signup"
-            }, { status: 400 })
+                msg: "No worker found.Try to signup"
+            }, { status: 404 })
         }
-        
-        verified= true
+        if (!userExists?.password) {
+            throw new Error("User password not found");
+        }
+        const valid = await bcrypt.compare(password, userExists?.password)
+        if (!valid) {
+            return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+        }
+        const token = signToken({
+            email: userExists.email,
+            id: userExists.id
+        })
         return NextResponse.json({
-            verified,
-            success: true,
-            msg: "Worker Login successfully!"
+            token,
+            success:true,
+            msg: "worker Login successfully!"
         },
             {
                 status: 200
             })
     } catch (err) {
+        console.log("error in worker signin route")
         return NextResponse.json({
             success: false,
             msg: "internal error in signin.js of worker"

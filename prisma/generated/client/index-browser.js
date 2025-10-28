@@ -121,7 +121,6 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 });
 
 exports.Prisma.MyWorkerScalarFieldEnum = {
-  id: 'id',
   name: 'name',
   mobileNumber: 'mobileNumber',
   profilePhoto: 'profilePhoto',
@@ -137,11 +136,13 @@ exports.Prisma.MyWorkerScalarFieldEnum = {
   age: 'age',
   verified: 'verified',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  id: 'id',
+  email: 'email',
+  password: 'password'
 };
 
 exports.Prisma.MyVendorScalarFieldEnum = {
-  id: 'id',
   ownerName: 'ownerName',
   mobileNumber: 'mobileNumber',
   profilePhoto: 'profilePhoto',
@@ -157,11 +158,11 @@ exports.Prisma.MyVendorScalarFieldEnum = {
   verified: 'verified',
   age: 'age',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  id: 'id'
 };
 
 exports.Prisma.MyUserScalarFieldEnum = {
-  id: 'id',
   name: 'name',
   mobileNumber: 'mobileNumber',
   profilePhoto: 'profilePhoto',
@@ -171,7 +172,9 @@ exports.Prisma.MyUserScalarFieldEnum = {
   isActive: 'isActive',
   address: 'address',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  id: 'id',
+  password: 'password'
 };
 
 exports.Prisma.WorkScalarFieldEnum = {
@@ -182,41 +185,6 @@ exports.Prisma.WorkScalarFieldEnum = {
   alternateNumber: 'alternateNumber',
   workId: 'workId',
   createdAt: 'createdAt'
-};
-
-exports.Prisma.UserScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  email: 'email',
-  emailVerified: 'emailVerified',
-  image: 'image',
-  mobileNumber: 'mobileNumber',
-  role: 'role',
-  myUserId: 'myUserId',
-  myVendorId: 'myVendorId',
-  myWorkerId: 'myWorkerId'
-};
-
-exports.Prisma.AccountScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  type: 'type',
-  provider: 'provider',
-  providerAccountId: 'providerAccountId',
-  refresh_token: 'refresh_token',
-  access_token: 'access_token',
-  expires_at: 'expires_at',
-  token_type: 'token_type',
-  scope: 'scope',
-  id_token: 'id_token',
-  session_state: 'session_state'
-};
-
-exports.Prisma.SessionScalarFieldEnum = {
-  id: 'id',
-  sessionToken: 'sessionToken',
-  userId: 'userId',
-  expires: 'expires'
 };
 
 exports.Prisma.SortOrder = {
@@ -239,10 +207,7 @@ exports.Prisma.ModelName = {
   MyWorker: 'MyWorker',
   MyVendor: 'MyVendor',
   MyUser: 'MyUser',
-  Work: 'Work',
-  User: 'User',
-  Account: 'Account',
-  Session: 'Session'
+  Work: 'Work'
 };
 
 /**

@@ -8,13 +8,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//
-// ====== Your existing models ======
-//
 model MyWorker {
-  id           String   @id @default(uuid())
   name         String?  @db.VarChar(50)
-  mobileNumber String?  @unique @db.VarChar(10)
+  mobileNumber String?  @db.VarChar(10)
   profilePhoto String?  @default("")
   photo        String?  @default("")
   video        String?  @default("")
@@ -29,17 +25,18 @@ model MyWorker {
   verified     Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  User         User[]
+  id           String   @id @default(uuid())
+  email        String   @unique
+  password     String   @default("")
 }
 
 model MyVendor {
-  id            String   @id @default(uuid())
   ownerName     String?  @db.VarChar(50)
-  mobileNumber  String?  @unique @db.VarChar(10)
+  mobileNumber  String?  @db.VarChar(10)
   profilePhoto  String?  @default("")
   shopName      String?  @db.VarChar(100)
   shopPhoto     String?  @default("")
-  email         String?  @db.VarChar(50)
+  email         String?  @unique @db.VarChar(50)
   password      String?  @default("")
   address       String?  @db.VarChar(255)
   rating        Float?   @default(0)
@@ -50,22 +47,22 @@ model MyVendor {
   age           Int?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  User          User[]
+  id            String   @id @default(uuid())
 }
 
 model MyUser {
-  id           String   @id @default(uuid())
   name         String?  @db.VarChar(50)
-  mobileNumber String?  @unique @db.VarChar(10)
+  mobileNumber String?  @db.VarChar(10)
   profilePhoto String?  @default("")
   work         String[]
-  email        String?
+  email        String?  @unique
   verified     Boolean  @default(false)
   isActive     Boolean  @default(true)
   address      String?  @default("")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  User         User[]
+  id           String   @id @default(uuid())
+  password     String   @default("")
   works        Work[]
 }
 
@@ -76,53 +73,6 @@ model Work {
   photos          String[]
   alternateNumber String?
   workId          String
-  user            MyUser   @relation(fields: [workId], references: [id])
   createdAt       DateTime @default(now())
-}
-
-model User {
-  id            String    @id @default(uuid())
-  name          String?
-  email         String?
-  emailVerified DateTime?
-  image         String?
-  mobileNumber  String?   @unique
-  accounts      Account[]
-  session       Session[]
-  role          String?
-  myUserId      String?
-  myUser        MyUser?   @relation(fields: [myUserId], references: [id], onDelete: Cascade)
-
-  myVendorId String?
-  myVendor   MyVendor? @relation(fields: [myVendorId], references: [id], onDelete: Cascade)
-
-  myWorkerId String?
-  myWorker   MyWorker? @relation(fields: [myWorkerId], references: [id], onDelete: Cascade)
-}
-
-model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user            MyUser   @relation(fields: [workId], references: [id])
 }

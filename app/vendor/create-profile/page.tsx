@@ -1,18 +1,17 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import { User, Phone, MapPin, Briefcase, ShoppingBag, DollarSign, Calendar, Camera, Mail, Lock } from 'lucide-react';
+import { User, Phone, MapPin, Briefcase, ShoppingBag, DollarSign, Calendar, Camera, Mail, Lock, Store } from 'lucide-react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
 type FormDataType = {
-    name: string;
+    ownerName: string;
     shopName: string;
-    email: string;
     mobileNumber: string;
     age: number;
-    password: string;
+    bussinessType: string,
     address: string;
     shopPhoto: File | null;
     profilePhoto: File | null;
@@ -24,48 +23,18 @@ type ErrorsType = {
 };
 
 
-type Data = {
-    ownerName: string,
-    mobileNumber: string,
-    age: number
-}
-
-
 
 export default function WorkerProfileForm() {
-    const { data: session, status } = useSession() 
+
     const router = useRouter()
-    useEffect(() => {
-        if (status === 'unauthenticated') {
-            signIn('google')
-        }
-    }, [status])
-    const [savedData, setSavedData] = useState<Data>({
-        age: 0,
-        ownerName: '',
-        mobileNumber: ''
-    })
-    useEffect(() => {
-        const saved = localStorage.getItem('vendorSignupData');
-        if (saved) {
-            const data = JSON.parse(saved)
-            setSavedData((prev) => ({ ...prev, age: data.age }))
-            setSavedData((prev) => ({ ...prev, mobileNumber: data.mobileNumber }))
-            setSavedData((prev) => ({ ...prev, ownerName: data.ownerName }))
-            setFormData((prev) => ({ ...prev, age: data.age }))
-            setFormData((prev) => ({ ...prev, mobileNumber: data.mobileNumber }))
-            setFormData((prev) => ({ ...prev, name: data.ownerName }))
-            console.log(data.mobileNumber)
-            console.log(data.ownerName)
-        }
-    }, []);
+
+
     const [formData, setFormData] = useState<FormDataType>({
         mobileNumber: "",
-        name: '',
-        email: '',
+        ownerName: '',
         shopName: '',
+        bussinessType: '',
         address: '',
-        password: '',
         profilePhoto: null,
         shopPhoto: null,
         age: 0
@@ -76,7 +45,7 @@ export default function WorkerProfileForm() {
 
     const validateForm = () => {
         const newErrors: any = {};
-        {/*
+
         // Mobile Number validation
         if (!formData.mobileNumber.trim()) {
             newErrors.mobileNumber = 'Mobile number is required';
@@ -85,12 +54,12 @@ export default function WorkerProfileForm() {
         }
 
         // owner's Name validation
-        if (!formData.name.trim()) {
+        if (!formData.ownerName.trim()) {
             newErrors.name = 'Name is required';
-        } else if (formData.name.trim().length < 2) {
+        } else if (formData.ownerName.trim().length < 2) {
             newErrors.name = 'Name must be at least 2 characters long';
         }
-    */}
+
 
         //shopname validation
         if (!formData.shopName.trim()) {
@@ -98,28 +67,13 @@ export default function WorkerProfileForm() {
         } else if (formData.shopName.trim().length < 7) {
             newErrors.shopName = 'Name must be at least 7 characters long';
         }
-
-        //email validation
-        if (!formData.email.trim()) {
-            newErrors.email = 'Email is required';
-        } else if (formData.email.trim().length < 5) {
-            newErrors.email = 'Name must be at least 5 characters long';
+        //shop type validation
+        if (!formData.bussinessType.trim()) {
+            newErrors.bussinessType = 'Type of the shop is required';
         }
 
-        //password validation 
-        if (!formData.password.trim()) {
-            newErrors.password = 'Password is required';
-        } else if (formData.password.trim().length < 8) {
-            newErrors.password = 'Password must be at least 8 characters long';
-        } else if (!/[A-Z]/.test(formData.password)) {
-            newErrors.password = 'Password must contain at least one uppercase letter';
-        } else if (!/[a-z]/.test(formData.password)) {
-            newErrors.password = 'Password must contain at least one lowercase letter';
-        } else if (!/[0-9]/.test(formData.password)) {
-            newErrors.password = 'Password must contain at least one number';
-        } else if (!/[!@#$%^&*]/.test(formData.password)) {
-            newErrors.password = 'Password must contain at least one special character (!@#$%^&*)';
-        }
+
+
 
         // Address validation
         if (!formData.address.trim()) {
@@ -137,7 +91,7 @@ export default function WorkerProfileForm() {
             newErrors.shopPhoto = 'Photo is required';
         }
 
-        {/*
+
         // Age validation
         if (!formData.age) {
             newErrors.age = 'Age is required';
@@ -148,7 +102,7 @@ export default function WorkerProfileForm() {
         } else if (Number(formData.age) > 68) {
             newErrors.age = 'Worker age should be less than 68 years';
         }
-    */}
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -163,59 +117,56 @@ export default function WorkerProfileForm() {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         setSubmitSuccess(false);
+        if (!validateForm()) {
+            return
+        }
         try {
-            const ageInNumber = Number(formData.age)
-            formData.age = ageInNumber
-            const response = await axios.post('/api/vendor/profile/create', savedData)
-            if (!response) {
-                console.log("response not found")
-                alert("profile not created")
-            }
-            if (response.data?.success && savedData.ownerName === formData.name && savedData.age === formData.age && savedData.mobileNumber === formData.mobileNumber) {
-                alert("profile created successfully")
-            }
-            if (!response.data?.success) {
-                alert("Error!! profile not created")
+            const ageNumber = Number(formData.age)
+            formData.age = ageNumber
+            const token = localStorage.getItem("token")
+            const response = await axios.post('/api/vendor/profile/create', formData, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            })
+            if (response.data.valid === true) {
+                console.log(response)
+                setTimeout(() => {
+                    setFormData({
+                        mobileNumber: '',
+                        ownerName: '',
+                        shopName: '',
+                        bussinessType: "",
+                        address: '',
+                        profilePhoto: null,
+                        shopPhoto: null,
+                        age: 0
+                    });
+                    setSubmitSuccess(false);
+                }, 2000);
+                router.push("/vendor/dashboard")
             }
 
 
         } catch (err: any) {
-            if (err.messgae === 'Request failed with status code 500') {
-                alert("No user found!! Create new account")
+            console.log("error in profile creation of vendor", err.response?.status)
+            console.log(err.response.status)
+            if (err.response?.status == 404) {
+                alert("Vendor not found")
+                router.push('/vendor/signin')
             }
-            else {
-                console.log("error in profile creation of user", err.message)
-                alert("Internal error. Please try after sometime")
+            else if (err.response?.status == 400) {
+                alert("Session expired. Please login again")
+                router.push('/vendor/signin')
             }
 
+            else {
+                alert("internal error in profile CREATION of vendor.")
+            }
         }
-        if (validateForm()) {
-            //console.log('Form submitted successfully:', formData);
-            setSubmitSuccess(true);
-            // Reset form after successful submission
-            setTimeout(() => {
-                setFormData({
-                    mobileNumber: '',
-                    name: '',
-                    shopName: '',
-                    address: '',
-                    profilePhoto: null,
-                    email: '',
-                    shopPhoto: null,
-                    password: '',
-                    age: 0
-                });
-                setSubmitSuccess(false);
-            }, 2000);
-            setTimeout(() => {
-                setSavedData({
-                    mobileNumber: '',
-                    ownerName: '',
-                    age: 0
-                });
-                setSubmitSuccess(false);
-            }, 2000);
-        }
+
+
     };
 
     return (
@@ -226,7 +177,7 @@ export default function WorkerProfileForm() {
                         <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-full mb-4">
                             <User className="w-8 h-8 text-white" />
                         </div>
-                        <h1 className="text-3xl font-bold text-gray-800">Create Worker Profile</h1>
+                        <h1 className="text-3xl font-bold text-gray-800">Create Vendor Profile</h1>
                         <p className="text-gray-600 mt-2">All fields are mandatory</p>
                     </div>
 
@@ -245,8 +196,8 @@ export default function WorkerProfileForm() {
                             </label>
                             <input
                                 type="text"
-                                name="name"
-                                value={savedData.ownerName}
+                                name="ownerName"
+                                value={formData.ownerName}
                                 onChange={handleInputChange}
                                 className={`w-full px-4 py-3 text-gray-600 border   rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition`}
                                 placeholder="Enter full name"
@@ -264,7 +215,7 @@ export default function WorkerProfileForm() {
                             <input
                                 type="tel"
                                 name="mobileNumber"
-                                value={savedData.mobileNumber}
+                                value={formData.mobileNumber}
                                 onChange={handleInputChange}
                                 className={`w-full px-4 py-3 text-gray-600 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition`}
                                 placeholder="Enter 10-digit mobile number"
@@ -283,7 +234,7 @@ export default function WorkerProfileForm() {
                             <input
                                 type="number"
                                 name="age"
-                                value={savedData.age}
+                                value={formData.age}
                                 onChange={handleInputChange}
                                 className={`w-full px-4 py-3 text-gray-600 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition`}
                                 placeholder="Enter age"
@@ -291,39 +242,6 @@ export default function WorkerProfileForm() {
                             />
                         </div>
 
-                        {/*/ email  */}
-                        <div>
-                            <label className="flex items-center text-sm font-medium text-black mb-2">
-                                <Mail className="w-4 h-4 mr-2" />
-                                Email  <span className="text-red-500 ml-1">*</span>
-                            </label>
-                            <input
-                                type="text"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleInputChange}
-                                className={`w-full px-4 py-3 text-gray-600 border  ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition`}
-                                placeholder="Enter your email "
-                            />
-                            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-                        </div>
-
-                        {/*/ password  */}
-                        <div>
-                            <label className="flex items-center text-sm font-medium text-black mb-2">
-                                <Lock className="w-4 h-4 mr-2" />
-                                Password <span className="text-red-500 ml-1">*</span>
-                            </label>
-                            <input
-                                type="password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleInputChange}
-                                className={`w-full px-4 py-3 text-gray-600 border  ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition`}
-                                placeholder="Enter your password"
-                            />
-                            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
-                        </div>
 
                         {/* shop name */}
                         <div>
@@ -331,15 +249,49 @@ export default function WorkerProfileForm() {
                                 <ShoppingBag className="w-4 h-4 mr-2" />
                                 Shop Name <span className="text-red-500 ml-1">*</span>
                             </label>
-                            <input
-                                type="text"
+
+                            <select
                                 name="shopName"
                                 value={formData.shopName}
                                 onChange={handleInputChange}
-                                className={`w-full px-4 py-3 text-gray-600 border  ${errors.shopName ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition`}
-                                placeholder="Enter full name"
+                                className={`w-full px-4 py-3 text-gray-600 border ${errors.shopName ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition bg-white`}
+                            >
+                                <option value="">Select a shop</option>
+                                <option value="furniture-store">Furniture Store</option>
+                                <option value="paint-shop">Paint Shop</option>
+                                <option value="plumbing-supplies">Plumbing Supplies</option>
+                                <option value="electrical-shop">Electrical Shop</option>
+                                <option value="hardware-store">Hardware Store</option>
+                                <option value="tailoring-shop">Tailor Shop</option>
+                                <option value="cloth-store">Cloths Shop</option>
+                                <option value="Welding-shop">Welding Shop</option>
+                                <option value="barber-shop">Barber Shop</option>
+                                <option value="unisex-salon">Unisex Salon</option>
+                                <option value="other-shop">other</option>
+                            </select>
+
+                            {errors.shopName && (
+                                <p className="text-red-500 text-sm mt-1">{errors.shopName}</p>
+                            )}
+                        </div>
+
+
+                        {/* shop type */}
+                        <div>
+                            <label className="flex items-center text-sm font-medium text-black mb-2">
+                                <Store className="w-4 h-4 mr-2" />
+                                Shop Type <span className="text-red-500 ml-1">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="bussinessType"
+                                value={formData.bussinessType}
+                                onChange={handleInputChange}
+                                className={`w-full px-4 py-3 text-gray-600 border  ${errors.bussinessType ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition`}
+                                placeholder="eg. painting shop , hardware shop "
                             />
-                            {errors.shopName && <p className="text-red-500 text-sm mt-1">{errors.shopName}</p>}
+                            {errors.bussinessType && <p className="text-red-500 text-sm mt-1">{errors.bussinessType}</p>}
                         </div>
 
 
@@ -412,9 +364,7 @@ export default function WorkerProfileForm() {
                         </div>
 
                         {/* Submit Button */}
-                        <button onClick={()=>{
-                            router.push('/vendor/dashboard')
-                        }}
+                        <button onClick={handleSubmit}
                             type="submit"
                             className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 px-6 rounded-lg transition duration-200 transform hover:scale-105 shadow-lg"
                         >

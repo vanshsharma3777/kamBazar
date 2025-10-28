@@ -1,11 +1,10 @@
 'use client'
-
 import { useEffect, useState } from 'react';
 import { User, Phone, MapPin, Briefcase, DollarSign, Calendar, Camera, Video } from 'lucide-react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-
+import { fromTheme } from 'tailwind-merge';
 type FormDataType = {
   name: string;
   mobileNumber: string;
@@ -17,48 +16,37 @@ type FormDataType = {
   profilePhoto: File | null;
   video: File | null;
 };
-
 type ErrorsType = {
   [key: string]: string;
 };
 
 type Data = {
-    name:string,
-    mobileNumber:string,
-    age:number
+  name: string,
+  mobileNumber: string,
+  age: number
 };
-
-
 export default function WorkerProfileForm() {
   const router = useRouter()
-  const { data: session, status } = useSession()
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      signIn('google')
-    }
-  }, [status])
-
-  const [savedData ,setSavedData]= useState<Data>({
-    name:'',
-    age:0,
-    mobileNumber:''
+  const [savedData, setSavedData] = useState<Data>({
+    name: '',
+    age: 0,
+    mobileNumber: ''
   })
-
   useEffect(() => {
-        const saved = localStorage.getItem('workerSignupData');
-        if (saved) {
-            const data = JSON.parse(saved)
-            setSavedData((prev) => ({ ...prev, age: data.age }))
-            setSavedData((prev) => ({ ...prev, mobileNumber: data.mobileNumber }))
-            setSavedData((prev) => ({ ...prev, name: data.name }))
-            setFormData((prev) => ({ ...prev, name: data.name }))
-            setFormData((prev) => ({ ...prev, name: data.name }))
-            setFormData((prev) => ({ ...prev, name: data.name }))
-            console.log(data.mobileNumber)
-            console.log(data.name)
-            console.log(data.age)
-        }
-    }, []);
+    const saved = localStorage.getItem('workerSignupData');
+    if (saved) {
+      const data = JSON.parse(saved)
+      setSavedData((prev) => ({ ...prev, age: data.age }))
+      setSavedData((prev) => ({ ...prev, mobileNumber: data.mobileNumber }))
+      setSavedData((prev) => ({ ...prev, name: data.name }))
+      setFormData((prev) => ({ ...prev, name: data.name }))
+      setFormData((prev) => ({ ...prev, name: data.name }))
+      setFormData((prev) => ({ ...prev, name: data.name }))
+      console.log(data.mobileNumber)
+      console.log(data.name)
+      console.log(data.age)
+    }
+  }, []);
   const [formData, setFormData] = useState<FormDataType>({
     mobileNumber: "",
     name: '',
@@ -77,54 +65,42 @@ export default function WorkerProfileForm() {
   const validateForm = () => {
     const newErrors: any = {};
 
-  {/*}  // Mobile Number validation
     if (!formData.mobileNumber.trim()) {
       newErrors.mobileNumber = 'Mobile number is required';
     } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
       newErrors.mobileNumber = 'Please enter a valid 10-digit mobile number';
     }
 
-    // Name validation
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
     } else if (formData.name.trim().length < 2) {
       newErrors.name = 'Name must be at least 2 characters long';
     }
-*/}
-    // Address validation
     if (!formData.address.trim()) {
       newErrors.address = 'Address is required';
     }
 
-
-    // Profile Photo validation
     if (!formData.profilePhoto) {
       newErrors.profilePhoto = 'Profile photo is required';
     }
 
-    // Photo validation
     if (!formData.photo) {
       newErrors.photo = 'Photo is required';
     }
-
-    // Video validation
     if (!formData.video) {
       newErrors.video = 'Video is required';
     }
 
-    // Daily Wage validation
     if (!formData.dailyWage) {
       newErrors.dailyWage = 'Daily wage is required';
     } else if (isNaN(Number(formData.dailyWage)) || Number(formData.dailyWage) <= 0) {
       newErrors.dailyWage = 'Please enter a valid positive number for daily wage';
     }
 
-    // Occupation validation
     if (!formData.occupation.trim()) {
       newErrors.occupation = 'Occupation is required';
     }
 
- {/*}   // Age validation
     if (!formData.age) {
       newErrors.age = 'Age is required';
     } else if (isNaN(Number(formData.age)) || Number(formData.age) <= 0) {
@@ -134,7 +110,7 @@ export default function WorkerProfileForm() {
     } else if (Number(formData.age) > 68) {
       newErrors.age = 'Worker age should be less than 68 years';
     }
-*/}
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -146,57 +122,32 @@ export default function WorkerProfileForm() {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
-
-  const handleFileChange = (e: any, fieldName: any) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData(prev => ({ ...prev, [fieldName]: file }));
-      console.log(formData.photo)
-      if (errors[fieldName]) {
-        setErrors(prev => ({ ...prev, [fieldName]: '' }));
-      }
-    }
-  };
-
+  
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setSubmitSuccess(false);
-    try {
-      const dailyWageInNumber = Number(formData.dailyWage)
-      const ageInNumber = Number(formData.age)
-      formData.dailyWage = dailyWageInNumber
-      formData.age = ageInNumber
-      const response = await axios.post('/api/worker/profile/create', savedData)
-      if (!response) {
-        console.log("response not found")
-        alert("profile not created")
-      }
-      if(response.data?.success && savedData.age===formData.age &&  savedData.name===formData.name &&  savedData.mobileNumber===formData.mobileNumber  ){
-        alert("profile created successfully")
-      }
-      if(!response.data?.success){
-        alert("Error!! profile not created")
-      }
-
-
-    } catch (err: any) {
-            if(err.messgae === 'Request failed with status code 500'){
-                alert("No user found!! Create new account")
-            }
-            else{
-                console.log("error in profile creation of user", err.message)
-            alert("Internal error. Please try after sometime")
-            }
-            
+      if (!validateForm()) {
+            return; 
         }
-
-    if (validateForm()) {
-      //console.log('Form submitted successfully:', formData);
-      setSubmitSuccess(true);
-      // Reset form after successful submission
-      setTimeout(() => {
+    try {
+      const ageInNumber = Number(formData.age)
+      formData.age= ageInNumber
+      const dailyWageInNumber = Number(formData.dailyWage)
+      formData.dailyWage = dailyWageInNumber
+      const token = localStorage.getItem("token")
+      const response = await axios.post('/api/worker/profile/create', formData, {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      })
+      if (response.data.valid === true) {
+        console.log("response:" , response)
+        router.push('/worker/dashboard')
+        setSubmitSuccess(true)
+        setTimeout(() => {
         setFormData({
-          mobileNumber: '',
+          mobileNumber: "",
           name: '',
           address: '',
           profilePhoto: null,
@@ -207,16 +158,24 @@ export default function WorkerProfileForm() {
           age: 0
         });
         setSubmitSuccess(false);
-      }, 2000);
-
-      setTimeout(() => {
-        setSavedData({
-          name:'',
-          mobileNumber:'',
-          age:0
-        })
-      }, 2000);
+      }, 100000);
+      }
+    } catch (err: any) {
+      console.log("error in profile CReation of worker", err.response?.status)
+      console.log(err.response.status)
+      if (err.response?.status == 404) {
+        alert("worker not exists")
+        router.push('/worker/signin')
+      } 
+      else if(err.response?.status==400){
+        alert("Session expired. Please login again")
+        router.push('/worker/signin')
+      } 
+      else {
+        alert("internal error in profile CREATION of worker.")
+      }
     }
+   
   };
 
   return (
@@ -238,7 +197,6 @@ export default function WorkerProfileForm() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Name */}
             <div>
               <label className="flex items-center text-sm font-medium text-black mb-2">
                 <User className="w-4 h-4 mr-2" />
@@ -247,15 +205,14 @@ export default function WorkerProfileForm() {
               <input
                 type="text"
                 name="name"
-                value={savedData.name}
+                value={formData.name}
                 onChange={handleInputChange}
                 className={`w-full px-4 py-3 text-gray-600 border   rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition`}
                 placeholder="Enter full name"
               />
-
+              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
             </div>
 
-            {/* Mobile Number */}
             <div>
               <label className="flex items-center text-sm font-medium text-black mb-2">
                 <Phone className="w-4 h-4 mr-2" />
@@ -264,15 +221,15 @@ export default function WorkerProfileForm() {
               <input
                 type="tel"
                 name="mobileNumber"
-                value={savedData.mobileNumber}
+                value={formData.mobileNumber}
                 onChange={handleInputChange}
                 className={`w-full px-4 py-3 text-gray-600 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition`}
                 placeholder="Enter 10-digit mobile number"
                 maxLength={10}
               />
+              {errors.mobileNumber && <p className="text-red-500 text-sm mt-1">{errors.mobileNumber}</p>}
             </div>
 
-            {/* Age */}
             <div>
               <label className="flex items-center text-sm font-medium text-black mb-2">
                 <Calendar className="w-4 h-4 mr-2" />
@@ -281,15 +238,15 @@ export default function WorkerProfileForm() {
               <input
                 type="number"
                 name="age"
-                value={savedData.age}
+                value={formData.age}
                 onChange={handleInputChange}
                 className={`w-full px-4 py-3 text-gray-600 border  rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition`}
                 placeholder="Enter age"
                 min="0"
               />
+              {errors.age && <p className="text-red-500 text-sm mt-1">{errors.age}</p>}
             </div>
 
-            {/* Address */}
             <div>
               <label className="flex items-center text-sm font-medium text-black mb-2">
                 <MapPin className="w-4 h-4 mr-2" />
@@ -305,8 +262,6 @@ export default function WorkerProfileForm() {
               />
               {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
             </div>
-
-            {/* Occupation */}
             <div>
               <label className="flex items-center text-sm font-medium text-black mb-2">
                 <Briefcase className="w-4 h-4 mr-2" />
@@ -323,7 +278,6 @@ export default function WorkerProfileForm() {
               {errors.occupation && <p className="text-red-500 text-sm mt-1">{errors.occupation}</p>}
             </div>
 
-            {/* Daily Wage */}
             <div>
               <label className="flex items-center text-sm font-medium text-black mb-2">
                 <DollarSign className="w-4 h-4 mr-2" />
@@ -341,7 +295,6 @@ export default function WorkerProfileForm() {
               {errors.dailyWage && <p className="text-red-500 text-sm mt-1">{errors.dailyWage}</p>}
             </div>
 
-            {/* Profile Photo */}
             <div>
               <label className="flex items-center text-sm font-medium text-black mb-2">
                 <Camera className="w-4 h-4 mr-2" />
@@ -366,7 +319,6 @@ export default function WorkerProfileForm() {
               {errors.profilePhoto && <p className="text-red-500 text-sm mt-1">{errors.profilePhoto}</p>}
             </div>
 
-            {/* Photo */}
             <div>
               <label className="flex items-center text-sm font-medium text-black mb-2">
                 <Camera className="w-4 h-4 mr-2" />
@@ -391,7 +343,6 @@ export default function WorkerProfileForm() {
               {errors.photo && <p className="text-red-500 text-sm mt-1">{errors.photo}</p>}
             </div>
 
-            {/* Video */}
             <div>
               <label className="flex items-center text-sm font-medium text-black mb-2">
                 <Video className="w-4 h-4 mr-2" />
@@ -400,7 +351,7 @@ export default function WorkerProfileForm() {
               <input
                 type="file"
                 accept="video/*"
-                 onChange={(e) => {
+                onChange={(e) => {
                   const file = e.target.files?.[0]
                   if (file) {
                     setFormData((prev) => ({ ...prev, video: file }))
@@ -416,10 +367,7 @@ export default function WorkerProfileForm() {
               {errors.video && <p className="text-red-500 text-sm mt-1">{errors.video}</p>}
             </div>
 
-            {/* Submit Button */}
-            <button onClick={()=>{
-              router.push('/worker/dashboard')
-            }}
+            <button onClick={handleSubmit}
               type="submit"
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 px-6 rounded-lg transition duration-200 transform hover:scale-105 shadow-lg"
             >
