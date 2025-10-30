@@ -1179,12 +1179,16 @@ export namespace Prisma {
     dailyWage: number | null
     rating: number | null
     age: number | null
+    lat: number | null
+    lng: number | null
   }
 
   export type MyWorkerSumAggregateOutputType = {
     dailyWage: number | null
     rating: number | null
     age: number | null
+    lat: number | null
+    lng: number | null
   }
 
   export type MyWorkerMinAggregateOutputType = {
@@ -1199,12 +1203,13 @@ export namespace Prisma {
     occupation: string | null
     feedback: string | null
     age: number | null
-    verified: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     id: string | null
     email: string | null
     password: string | null
+    lat: number | null
+    lng: number | null
   }
 
   export type MyWorkerMaxAggregateOutputType = {
@@ -1219,12 +1224,13 @@ export namespace Prisma {
     occupation: string | null
     feedback: string | null
     age: number | null
-    verified: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     id: string | null
     email: string | null
     password: string | null
+    lat: number | null
+    lng: number | null
   }
 
   export type MyWorkerCountAggregateOutputType = {
@@ -1241,12 +1247,13 @@ export namespace Prisma {
     pastDeals: number
     presentDeals: number
     age: number
-    verified: number
     createdAt: number
     updatedAt: number
     id: number
     email: number
     password: number
+    lat: number
+    lng: number
     _all: number
   }
 
@@ -1255,12 +1262,16 @@ export namespace Prisma {
     dailyWage?: true
     rating?: true
     age?: true
+    lat?: true
+    lng?: true
   }
 
   export type MyWorkerSumAggregateInputType = {
     dailyWage?: true
     rating?: true
     age?: true
+    lat?: true
+    lng?: true
   }
 
   export type MyWorkerMinAggregateInputType = {
@@ -1275,12 +1286,13 @@ export namespace Prisma {
     occupation?: true
     feedback?: true
     age?: true
-    verified?: true
     createdAt?: true
     updatedAt?: true
     id?: true
     email?: true
     password?: true
+    lat?: true
+    lng?: true
   }
 
   export type MyWorkerMaxAggregateInputType = {
@@ -1295,12 +1307,13 @@ export namespace Prisma {
     occupation?: true
     feedback?: true
     age?: true
-    verified?: true
     createdAt?: true
     updatedAt?: true
     id?: true
     email?: true
     password?: true
+    lat?: true
+    lng?: true
   }
 
   export type MyWorkerCountAggregateInputType = {
@@ -1317,12 +1330,13 @@ export namespace Prisma {
     pastDeals?: true
     presentDeals?: true
     age?: true
-    verified?: true
     createdAt?: true
     updatedAt?: true
     id?: true
     email?: true
     password?: true
+    lat?: true
+    lng?: true
     _all?: true
   }
 
@@ -1426,12 +1440,13 @@ export namespace Prisma {
     pastDeals: string[]
     presentDeals: string[]
     age: number | null
-    verified: boolean
     createdAt: Date
     updatedAt: Date
     id: string
     email: string
     password: string
+    lat: number | null
+    lng: number | null
     _count: MyWorkerCountAggregateOutputType | null
     _avg: MyWorkerAvgAggregateOutputType | null
     _sum: MyWorkerSumAggregateOutputType | null
@@ -1467,12 +1482,13 @@ export namespace Prisma {
     pastDeals?: boolean
     presentDeals?: boolean
     age?: boolean
-    verified?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     id?: boolean
     email?: boolean
     password?: boolean
+    lat?: boolean
+    lng?: boolean
   }, ExtArgs["result"]["myWorker"]>
 
   export type MyWorkerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1489,12 +1505,13 @@ export namespace Prisma {
     pastDeals?: boolean
     presentDeals?: boolean
     age?: boolean
-    verified?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     id?: boolean
     email?: boolean
     password?: boolean
+    lat?: boolean
+    lng?: boolean
   }, ExtArgs["result"]["myWorker"]>
 
   export type MyWorkerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1511,12 +1528,13 @@ export namespace Prisma {
     pastDeals?: boolean
     presentDeals?: boolean
     age?: boolean
-    verified?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     id?: boolean
     email?: boolean
     password?: boolean
+    lat?: boolean
+    lng?: boolean
   }, ExtArgs["result"]["myWorker"]>
 
   export type MyWorkerSelectScalar = {
@@ -1533,15 +1551,16 @@ export namespace Prisma {
     pastDeals?: boolean
     presentDeals?: boolean
     age?: boolean
-    verified?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     id?: boolean
     email?: boolean
     password?: boolean
+    lat?: boolean
+    lng?: boolean
   }
 
-  export type MyWorkerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"name" | "mobileNumber" | "profilePhoto" | "photo" | "video" | "dailyWage" | "address" | "rating" | "occupation" | "feedback" | "pastDeals" | "presentDeals" | "age" | "verified" | "createdAt" | "updatedAt" | "id" | "email" | "password", ExtArgs["result"]["myWorker"]>
+  export type MyWorkerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"name" | "mobileNumber" | "profilePhoto" | "photo" | "video" | "dailyWage" | "address" | "rating" | "occupation" | "feedback" | "pastDeals" | "presentDeals" | "age" | "createdAt" | "updatedAt" | "id" | "email" | "password" | "lat" | "lng", ExtArgs["result"]["myWorker"]>
 
   export type $MyWorkerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "MyWorker"
@@ -1560,12 +1579,13 @@ export namespace Prisma {
       pastDeals: string[]
       presentDeals: string[]
       age: number | null
-      verified: boolean
       createdAt: Date
       updatedAt: Date
       id: string
       email: string
       password: string
+      lat: number | null
+      lng: number | null
     }, ExtArgs["result"]["myWorker"]>
     composites: {}
   }
@@ -2002,12 +2022,13 @@ export namespace Prisma {
     readonly pastDeals: FieldRef<"MyWorker", 'String[]'>
     readonly presentDeals: FieldRef<"MyWorker", 'String[]'>
     readonly age: FieldRef<"MyWorker", 'Int'>
-    readonly verified: FieldRef<"MyWorker", 'Boolean'>
     readonly createdAt: FieldRef<"MyWorker", 'DateTime'>
     readonly updatedAt: FieldRef<"MyWorker", 'DateTime'>
     readonly id: FieldRef<"MyWorker", 'String'>
     readonly email: FieldRef<"MyWorker", 'String'>
     readonly password: FieldRef<"MyWorker", 'String'>
+    readonly lat: FieldRef<"MyWorker", 'Float'>
+    readonly lng: FieldRef<"MyWorker", 'Float'>
   }
     
 
@@ -2389,11 +2410,15 @@ export namespace Prisma {
   export type MyVendorAvgAggregateOutputType = {
     rating: number | null
     age: number | null
+    lat: number | null
+    lng: number | null
   }
 
   export type MyVendorSumAggregateOutputType = {
     rating: number | null
     age: number | null
+    lat: number | null
+    lng: number | null
   }
 
   export type MyVendorMinAggregateOutputType = {
@@ -2409,11 +2434,12 @@ export namespace Prisma {
     bussinessType: string | null
     feedback: string | null
     gstNumber: string | null
-    verified: boolean | null
     age: number | null
     createdAt: Date | null
     updatedAt: Date | null
     id: string | null
+    lat: number | null
+    lng: number | null
   }
 
   export type MyVendorMaxAggregateOutputType = {
@@ -2429,11 +2455,12 @@ export namespace Prisma {
     bussinessType: string | null
     feedback: string | null
     gstNumber: string | null
-    verified: boolean | null
     age: number | null
     createdAt: Date | null
     updatedAt: Date | null
     id: string | null
+    lat: number | null
+    lng: number | null
   }
 
   export type MyVendorCountAggregateOutputType = {
@@ -2449,11 +2476,12 @@ export namespace Prisma {
     bussinessType: number
     feedback: number
     gstNumber: number
-    verified: number
     age: number
     createdAt: number
     updatedAt: number
     id: number
+    lat: number
+    lng: number
     _all: number
   }
 
@@ -2461,11 +2489,15 @@ export namespace Prisma {
   export type MyVendorAvgAggregateInputType = {
     rating?: true
     age?: true
+    lat?: true
+    lng?: true
   }
 
   export type MyVendorSumAggregateInputType = {
     rating?: true
     age?: true
+    lat?: true
+    lng?: true
   }
 
   export type MyVendorMinAggregateInputType = {
@@ -2481,11 +2513,12 @@ export namespace Prisma {
     bussinessType?: true
     feedback?: true
     gstNumber?: true
-    verified?: true
     age?: true
     createdAt?: true
     updatedAt?: true
     id?: true
+    lat?: true
+    lng?: true
   }
 
   export type MyVendorMaxAggregateInputType = {
@@ -2501,11 +2534,12 @@ export namespace Prisma {
     bussinessType?: true
     feedback?: true
     gstNumber?: true
-    verified?: true
     age?: true
     createdAt?: true
     updatedAt?: true
     id?: true
+    lat?: true
+    lng?: true
   }
 
   export type MyVendorCountAggregateInputType = {
@@ -2521,11 +2555,12 @@ export namespace Prisma {
     bussinessType?: true
     feedback?: true
     gstNumber?: true
-    verified?: true
     age?: true
     createdAt?: true
     updatedAt?: true
     id?: true
+    lat?: true
+    lng?: true
     _all?: true
   }
 
@@ -2628,11 +2663,12 @@ export namespace Prisma {
     bussinessType: string | null
     feedback: string | null
     gstNumber: string | null
-    verified: boolean
     age: number | null
     createdAt: Date
     updatedAt: Date
     id: string
+    lat: number | null
+    lng: number | null
     _count: MyVendorCountAggregateOutputType | null
     _avg: MyVendorAvgAggregateOutputType | null
     _sum: MyVendorSumAggregateOutputType | null
@@ -2667,11 +2703,12 @@ export namespace Prisma {
     bussinessType?: boolean
     feedback?: boolean
     gstNumber?: boolean
-    verified?: boolean
     age?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     id?: boolean
+    lat?: boolean
+    lng?: boolean
   }, ExtArgs["result"]["myVendor"]>
 
   export type MyVendorSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2687,11 +2724,12 @@ export namespace Prisma {
     bussinessType?: boolean
     feedback?: boolean
     gstNumber?: boolean
-    verified?: boolean
     age?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     id?: boolean
+    lat?: boolean
+    lng?: boolean
   }, ExtArgs["result"]["myVendor"]>
 
   export type MyVendorSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2707,11 +2745,12 @@ export namespace Prisma {
     bussinessType?: boolean
     feedback?: boolean
     gstNumber?: boolean
-    verified?: boolean
     age?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     id?: boolean
+    lat?: boolean
+    lng?: boolean
   }, ExtArgs["result"]["myVendor"]>
 
   export type MyVendorSelectScalar = {
@@ -2727,14 +2766,15 @@ export namespace Prisma {
     bussinessType?: boolean
     feedback?: boolean
     gstNumber?: boolean
-    verified?: boolean
     age?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     id?: boolean
+    lat?: boolean
+    lng?: boolean
   }
 
-  export type MyVendorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"ownerName" | "mobileNumber" | "profilePhoto" | "shopName" | "shopPhoto" | "email" | "password" | "address" | "rating" | "bussinessType" | "feedback" | "gstNumber" | "verified" | "age" | "createdAt" | "updatedAt" | "id", ExtArgs["result"]["myVendor"]>
+  export type MyVendorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"ownerName" | "mobileNumber" | "profilePhoto" | "shopName" | "shopPhoto" | "email" | "password" | "address" | "rating" | "bussinessType" | "feedback" | "gstNumber" | "age" | "createdAt" | "updatedAt" | "id" | "lat" | "lng", ExtArgs["result"]["myVendor"]>
 
   export type $MyVendorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "MyVendor"
@@ -2752,11 +2792,12 @@ export namespace Prisma {
       bussinessType: string | null
       feedback: string | null
       gstNumber: string | null
-      verified: boolean
       age: number | null
       createdAt: Date
       updatedAt: Date
       id: string
+      lat: number | null
+      lng: number | null
     }, ExtArgs["result"]["myVendor"]>
     composites: {}
   }
@@ -3192,11 +3233,12 @@ export namespace Prisma {
     readonly bussinessType: FieldRef<"MyVendor", 'String'>
     readonly feedback: FieldRef<"MyVendor", 'String'>
     readonly gstNumber: FieldRef<"MyVendor", 'String'>
-    readonly verified: FieldRef<"MyVendor", 'Boolean'>
     readonly age: FieldRef<"MyVendor", 'Int'>
     readonly createdAt: FieldRef<"MyVendor", 'DateTime'>
     readonly updatedAt: FieldRef<"MyVendor", 'DateTime'>
     readonly id: FieldRef<"MyVendor", 'String'>
+    readonly lat: FieldRef<"MyVendor", 'Float'>
+    readonly lng: FieldRef<"MyVendor", 'Float'>
   }
     
 
@@ -3569,8 +3611,20 @@ export namespace Prisma {
 
   export type AggregateMyUser = {
     _count: MyUserCountAggregateOutputType | null
+    _avg: MyUserAvgAggregateOutputType | null
+    _sum: MyUserSumAggregateOutputType | null
     _min: MyUserMinAggregateOutputType | null
     _max: MyUserMaxAggregateOutputType | null
+  }
+
+  export type MyUserAvgAggregateOutputType = {
+    lat: number | null
+    lng: number | null
+  }
+
+  export type MyUserSumAggregateOutputType = {
+    lat: number | null
+    lng: number | null
   }
 
   export type MyUserMinAggregateOutputType = {
@@ -3578,13 +3632,13 @@ export namespace Prisma {
     mobileNumber: string | null
     profilePhoto: string | null
     email: string | null
-    verified: boolean | null
-    isActive: boolean | null
     address: string | null
     createdAt: Date | null
     updatedAt: Date | null
     id: string | null
     password: string | null
+    lat: number | null
+    lng: number | null
   }
 
   export type MyUserMaxAggregateOutputType = {
@@ -3592,13 +3646,13 @@ export namespace Prisma {
     mobileNumber: string | null
     profilePhoto: string | null
     email: string | null
-    verified: boolean | null
-    isActive: boolean | null
     address: string | null
     createdAt: Date | null
     updatedAt: Date | null
     id: string | null
     password: string | null
+    lat: number | null
+    lng: number | null
   }
 
   export type MyUserCountAggregateOutputType = {
@@ -3607,29 +3661,39 @@ export namespace Prisma {
     profilePhoto: number
     work: number
     email: number
-    verified: number
-    isActive: number
     address: number
     createdAt: number
     updatedAt: number
     id: number
     password: number
+    lat: number
+    lng: number
     _all: number
   }
 
+
+  export type MyUserAvgAggregateInputType = {
+    lat?: true
+    lng?: true
+  }
+
+  export type MyUserSumAggregateInputType = {
+    lat?: true
+    lng?: true
+  }
 
   export type MyUserMinAggregateInputType = {
     name?: true
     mobileNumber?: true
     profilePhoto?: true
     email?: true
-    verified?: true
-    isActive?: true
     address?: true
     createdAt?: true
     updatedAt?: true
     id?: true
     password?: true
+    lat?: true
+    lng?: true
   }
 
   export type MyUserMaxAggregateInputType = {
@@ -3637,13 +3701,13 @@ export namespace Prisma {
     mobileNumber?: true
     profilePhoto?: true
     email?: true
-    verified?: true
-    isActive?: true
     address?: true
     createdAt?: true
     updatedAt?: true
     id?: true
     password?: true
+    lat?: true
+    lng?: true
   }
 
   export type MyUserCountAggregateInputType = {
@@ -3652,13 +3716,13 @@ export namespace Prisma {
     profilePhoto?: true
     work?: true
     email?: true
-    verified?: true
-    isActive?: true
     address?: true
     createdAt?: true
     updatedAt?: true
     id?: true
     password?: true
+    lat?: true
+    lng?: true
     _all?: true
   }
 
@@ -3700,6 +3764,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: MyUserAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MyUserSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: MyUserMinAggregateInputType
@@ -3730,6 +3806,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: MyUserCountAggregateInputType | true
+    _avg?: MyUserAvgAggregateInputType
+    _sum?: MyUserSumAggregateInputType
     _min?: MyUserMinAggregateInputType
     _max?: MyUserMaxAggregateInputType
   }
@@ -3740,14 +3818,16 @@ export namespace Prisma {
     profilePhoto: string | null
     work: string[]
     email: string | null
-    verified: boolean
-    isActive: boolean
     address: string | null
     createdAt: Date
     updatedAt: Date
     id: string
     password: string
+    lat: number | null
+    lng: number | null
     _count: MyUserCountAggregateOutputType | null
+    _avg: MyUserAvgAggregateOutputType | null
+    _sum: MyUserSumAggregateOutputType | null
     _min: MyUserMinAggregateOutputType | null
     _max: MyUserMaxAggregateOutputType | null
   }
@@ -3772,13 +3852,13 @@ export namespace Prisma {
     profilePhoto?: boolean
     work?: boolean
     email?: boolean
-    verified?: boolean
-    isActive?: boolean
     address?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     id?: boolean
     password?: boolean
+    lat?: boolean
+    lng?: boolean
     works?: boolean | MyUser$worksArgs<ExtArgs>
     _count?: boolean | MyUserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["myUser"]>
@@ -3789,13 +3869,13 @@ export namespace Prisma {
     profilePhoto?: boolean
     work?: boolean
     email?: boolean
-    verified?: boolean
-    isActive?: boolean
     address?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     id?: boolean
     password?: boolean
+    lat?: boolean
+    lng?: boolean
   }, ExtArgs["result"]["myUser"]>
 
   export type MyUserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3804,13 +3884,13 @@ export namespace Prisma {
     profilePhoto?: boolean
     work?: boolean
     email?: boolean
-    verified?: boolean
-    isActive?: boolean
     address?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     id?: boolean
     password?: boolean
+    lat?: boolean
+    lng?: boolean
   }, ExtArgs["result"]["myUser"]>
 
   export type MyUserSelectScalar = {
@@ -3819,16 +3899,16 @@ export namespace Prisma {
     profilePhoto?: boolean
     work?: boolean
     email?: boolean
-    verified?: boolean
-    isActive?: boolean
     address?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     id?: boolean
     password?: boolean
+    lat?: boolean
+    lng?: boolean
   }
 
-  export type MyUserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"name" | "mobileNumber" | "profilePhoto" | "work" | "email" | "verified" | "isActive" | "address" | "createdAt" | "updatedAt" | "id" | "password", ExtArgs["result"]["myUser"]>
+  export type MyUserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"name" | "mobileNumber" | "profilePhoto" | "work" | "email" | "address" | "createdAt" | "updatedAt" | "id" | "password" | "lat" | "lng", ExtArgs["result"]["myUser"]>
   export type MyUserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     works?: boolean | MyUser$worksArgs<ExtArgs>
     _count?: boolean | MyUserCountOutputTypeDefaultArgs<ExtArgs>
@@ -3847,13 +3927,13 @@ export namespace Prisma {
       profilePhoto: string | null
       work: string[]
       email: string | null
-      verified: boolean
-      isActive: boolean
       address: string | null
       createdAt: Date
       updatedAt: Date
       id: string
       password: string
+      lat: number | null
+      lng: number | null
     }, ExtArgs["result"]["myUser"]>
     composites: {}
   }
@@ -4283,13 +4363,13 @@ export namespace Prisma {
     readonly profilePhoto: FieldRef<"MyUser", 'String'>
     readonly work: FieldRef<"MyUser", 'String[]'>
     readonly email: FieldRef<"MyUser", 'String'>
-    readonly verified: FieldRef<"MyUser", 'Boolean'>
-    readonly isActive: FieldRef<"MyUser", 'Boolean'>
     readonly address: FieldRef<"MyUser", 'String'>
     readonly createdAt: FieldRef<"MyUser", 'DateTime'>
     readonly updatedAt: FieldRef<"MyUser", 'DateTime'>
     readonly id: FieldRef<"MyUser", 'String'>
     readonly password: FieldRef<"MyUser", 'String'>
+    readonly lat: FieldRef<"MyUser", 'Float'>
+    readonly lng: FieldRef<"MyUser", 'Float'>
   }
     
 
@@ -4734,6 +4814,7 @@ export namespace Prisma {
     id: string | null
     workType: string | null
     description: string | null
+    isActive: boolean | null
     alternateNumber: string | null
     workId: string | null
     createdAt: Date | null
@@ -4743,6 +4824,7 @@ export namespace Prisma {
     id: string | null
     workType: string | null
     description: string | null
+    isActive: boolean | null
     alternateNumber: string | null
     workId: string | null
     createdAt: Date | null
@@ -4752,6 +4834,7 @@ export namespace Prisma {
     id: number
     workType: number
     description: number
+    isActive: number
     photos: number
     alternateNumber: number
     workId: number
@@ -4764,6 +4847,7 @@ export namespace Prisma {
     id?: true
     workType?: true
     description?: true
+    isActive?: true
     alternateNumber?: true
     workId?: true
     createdAt?: true
@@ -4773,6 +4857,7 @@ export namespace Prisma {
     id?: true
     workType?: true
     description?: true
+    isActive?: true
     alternateNumber?: true
     workId?: true
     createdAt?: true
@@ -4782,6 +4867,7 @@ export namespace Prisma {
     id?: true
     workType?: true
     description?: true
+    isActive?: true
     photos?: true
     alternateNumber?: true
     workId?: true
@@ -4865,6 +4951,7 @@ export namespace Prisma {
     id: string
     workType: string
     description: string
+    isActive: boolean
     photos: string[]
     alternateNumber: string | null
     workId: string
@@ -4892,6 +4979,7 @@ export namespace Prisma {
     id?: boolean
     workType?: boolean
     description?: boolean
+    isActive?: boolean
     photos?: boolean
     alternateNumber?: boolean
     workId?: boolean
@@ -4903,6 +4991,7 @@ export namespace Prisma {
     id?: boolean
     workType?: boolean
     description?: boolean
+    isActive?: boolean
     photos?: boolean
     alternateNumber?: boolean
     workId?: boolean
@@ -4914,6 +5003,7 @@ export namespace Prisma {
     id?: boolean
     workType?: boolean
     description?: boolean
+    isActive?: boolean
     photos?: boolean
     alternateNumber?: boolean
     workId?: boolean
@@ -4925,13 +5015,14 @@ export namespace Prisma {
     id?: boolean
     workType?: boolean
     description?: boolean
+    isActive?: boolean
     photos?: boolean
     alternateNumber?: boolean
     workId?: boolean
     createdAt?: boolean
   }
 
-  export type WorkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "workType" | "description" | "photos" | "alternateNumber" | "workId" | "createdAt", ExtArgs["result"]["work"]>
+  export type WorkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "workType" | "description" | "isActive" | "photos" | "alternateNumber" | "workId" | "createdAt", ExtArgs["result"]["work"]>
   export type WorkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | MyUserDefaultArgs<ExtArgs>
   }
@@ -4951,6 +5042,7 @@ export namespace Prisma {
       id: string
       workType: string
       description: string
+      isActive: boolean
       photos: string[]
       alternateNumber: string | null
       workId: string
@@ -5382,6 +5474,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Work", 'String'>
     readonly workType: FieldRef<"Work", 'String'>
     readonly description: FieldRef<"Work", 'String'>
+    readonly isActive: FieldRef<"Work", 'Boolean'>
     readonly photos: FieldRef<"Work", 'String[]'>
     readonly alternateNumber: FieldRef<"Work", 'String'>
     readonly workId: FieldRef<"Work", 'String'>
@@ -5828,12 +5921,13 @@ export namespace Prisma {
     pastDeals: 'pastDeals',
     presentDeals: 'presentDeals',
     age: 'age',
-    verified: 'verified',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     id: 'id',
     email: 'email',
-    password: 'password'
+    password: 'password',
+    lat: 'lat',
+    lng: 'lng'
   };
 
   export type MyWorkerScalarFieldEnum = (typeof MyWorkerScalarFieldEnum)[keyof typeof MyWorkerScalarFieldEnum]
@@ -5852,11 +5946,12 @@ export namespace Prisma {
     bussinessType: 'bussinessType',
     feedback: 'feedback',
     gstNumber: 'gstNumber',
-    verified: 'verified',
     age: 'age',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    id: 'id'
+    id: 'id',
+    lat: 'lat',
+    lng: 'lng'
   };
 
   export type MyVendorScalarFieldEnum = (typeof MyVendorScalarFieldEnum)[keyof typeof MyVendorScalarFieldEnum]
@@ -5868,13 +5963,13 @@ export namespace Prisma {
     profilePhoto: 'profilePhoto',
     work: 'work',
     email: 'email',
-    verified: 'verified',
-    isActive: 'isActive',
     address: 'address',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     id: 'id',
-    password: 'password'
+    password: 'password',
+    lat: 'lat',
+    lng: 'lng'
   };
 
   export type MyUserScalarFieldEnum = (typeof MyUserScalarFieldEnum)[keyof typeof MyUserScalarFieldEnum]
@@ -5884,6 +5979,7 @@ export namespace Prisma {
     id: 'id',
     workType: 'workType',
     description: 'description',
+    isActive: 'isActive',
     photos: 'photos',
     alternateNumber: 'alternateNumber',
     workId: 'workId',
@@ -5965,13 +6061,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -5982,6 +6071,13 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
   /**
    * Deep Input Types
@@ -6005,12 +6101,13 @@ export namespace Prisma {
     pastDeals?: StringNullableListFilter<"MyWorker">
     presentDeals?: StringNullableListFilter<"MyWorker">
     age?: IntNullableFilter<"MyWorker"> | number | null
-    verified?: BoolFilter<"MyWorker"> | boolean
     createdAt?: DateTimeFilter<"MyWorker"> | Date | string
     updatedAt?: DateTimeFilter<"MyWorker"> | Date | string
     id?: StringFilter<"MyWorker"> | string
     email?: StringFilter<"MyWorker"> | string
     password?: StringFilter<"MyWorker"> | string
+    lat?: FloatNullableFilter<"MyWorker"> | number | null
+    lng?: FloatNullableFilter<"MyWorker"> | number | null
   }
 
   export type MyWorkerOrderByWithRelationInput = {
@@ -6027,12 +6124,13 @@ export namespace Prisma {
     pastDeals?: SortOrder
     presentDeals?: SortOrder
     age?: SortOrderInput | SortOrder
-    verified?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     id?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    lat?: SortOrderInput | SortOrder
+    lng?: SortOrderInput | SortOrder
   }
 
   export type MyWorkerWhereUniqueInput = Prisma.AtLeast<{
@@ -6054,10 +6152,11 @@ export namespace Prisma {
     pastDeals?: StringNullableListFilter<"MyWorker">
     presentDeals?: StringNullableListFilter<"MyWorker">
     age?: IntNullableFilter<"MyWorker"> | number | null
-    verified?: BoolFilter<"MyWorker"> | boolean
     createdAt?: DateTimeFilter<"MyWorker"> | Date | string
     updatedAt?: DateTimeFilter<"MyWorker"> | Date | string
     password?: StringFilter<"MyWorker"> | string
+    lat?: FloatNullableFilter<"MyWorker"> | number | null
+    lng?: FloatNullableFilter<"MyWorker"> | number | null
   }, "id" | "email">
 
   export type MyWorkerOrderByWithAggregationInput = {
@@ -6074,12 +6173,13 @@ export namespace Prisma {
     pastDeals?: SortOrder
     presentDeals?: SortOrder
     age?: SortOrderInput | SortOrder
-    verified?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     id?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    lat?: SortOrderInput | SortOrder
+    lng?: SortOrderInput | SortOrder
     _count?: MyWorkerCountOrderByAggregateInput
     _avg?: MyWorkerAvgOrderByAggregateInput
     _max?: MyWorkerMaxOrderByAggregateInput
@@ -6104,12 +6204,13 @@ export namespace Prisma {
     pastDeals?: StringNullableListFilter<"MyWorker">
     presentDeals?: StringNullableListFilter<"MyWorker">
     age?: IntNullableWithAggregatesFilter<"MyWorker"> | number | null
-    verified?: BoolWithAggregatesFilter<"MyWorker"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"MyWorker"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"MyWorker"> | Date | string
     id?: StringWithAggregatesFilter<"MyWorker"> | string
     email?: StringWithAggregatesFilter<"MyWorker"> | string
     password?: StringWithAggregatesFilter<"MyWorker"> | string
+    lat?: FloatNullableWithAggregatesFilter<"MyWorker"> | number | null
+    lng?: FloatNullableWithAggregatesFilter<"MyWorker"> | number | null
   }
 
   export type MyVendorWhereInput = {
@@ -6128,11 +6229,12 @@ export namespace Prisma {
     bussinessType?: StringNullableFilter<"MyVendor"> | string | null
     feedback?: StringNullableFilter<"MyVendor"> | string | null
     gstNumber?: StringNullableFilter<"MyVendor"> | string | null
-    verified?: BoolFilter<"MyVendor"> | boolean
     age?: IntNullableFilter<"MyVendor"> | number | null
     createdAt?: DateTimeFilter<"MyVendor"> | Date | string
     updatedAt?: DateTimeFilter<"MyVendor"> | Date | string
     id?: StringFilter<"MyVendor"> | string
+    lat?: FloatNullableFilter<"MyVendor"> | number | null
+    lng?: FloatNullableFilter<"MyVendor"> | number | null
   }
 
   export type MyVendorOrderByWithRelationInput = {
@@ -6148,11 +6250,12 @@ export namespace Prisma {
     bussinessType?: SortOrderInput | SortOrder
     feedback?: SortOrderInput | SortOrder
     gstNumber?: SortOrderInput | SortOrder
-    verified?: SortOrder
     age?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     id?: SortOrder
+    lat?: SortOrderInput | SortOrder
+    lng?: SortOrderInput | SortOrder
   }
 
   export type MyVendorWhereUniqueInput = Prisma.AtLeast<{
@@ -6172,10 +6275,11 @@ export namespace Prisma {
     bussinessType?: StringNullableFilter<"MyVendor"> | string | null
     feedback?: StringNullableFilter<"MyVendor"> | string | null
     gstNumber?: StringNullableFilter<"MyVendor"> | string | null
-    verified?: BoolFilter<"MyVendor"> | boolean
     age?: IntNullableFilter<"MyVendor"> | number | null
     createdAt?: DateTimeFilter<"MyVendor"> | Date | string
     updatedAt?: DateTimeFilter<"MyVendor"> | Date | string
+    lat?: FloatNullableFilter<"MyVendor"> | number | null
+    lng?: FloatNullableFilter<"MyVendor"> | number | null
   }, "id" | "email">
 
   export type MyVendorOrderByWithAggregationInput = {
@@ -6191,11 +6295,12 @@ export namespace Prisma {
     bussinessType?: SortOrderInput | SortOrder
     feedback?: SortOrderInput | SortOrder
     gstNumber?: SortOrderInput | SortOrder
-    verified?: SortOrder
     age?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     id?: SortOrder
+    lat?: SortOrderInput | SortOrder
+    lng?: SortOrderInput | SortOrder
     _count?: MyVendorCountOrderByAggregateInput
     _avg?: MyVendorAvgOrderByAggregateInput
     _max?: MyVendorMaxOrderByAggregateInput
@@ -6219,11 +6324,12 @@ export namespace Prisma {
     bussinessType?: StringNullableWithAggregatesFilter<"MyVendor"> | string | null
     feedback?: StringNullableWithAggregatesFilter<"MyVendor"> | string | null
     gstNumber?: StringNullableWithAggregatesFilter<"MyVendor"> | string | null
-    verified?: BoolWithAggregatesFilter<"MyVendor"> | boolean
     age?: IntNullableWithAggregatesFilter<"MyVendor"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"MyVendor"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"MyVendor"> | Date | string
     id?: StringWithAggregatesFilter<"MyVendor"> | string
+    lat?: FloatNullableWithAggregatesFilter<"MyVendor"> | number | null
+    lng?: FloatNullableWithAggregatesFilter<"MyVendor"> | number | null
   }
 
   export type MyUserWhereInput = {
@@ -6235,13 +6341,13 @@ export namespace Prisma {
     profilePhoto?: StringNullableFilter<"MyUser"> | string | null
     work?: StringNullableListFilter<"MyUser">
     email?: StringNullableFilter<"MyUser"> | string | null
-    verified?: BoolFilter<"MyUser"> | boolean
-    isActive?: BoolFilter<"MyUser"> | boolean
     address?: StringNullableFilter<"MyUser"> | string | null
     createdAt?: DateTimeFilter<"MyUser"> | Date | string
     updatedAt?: DateTimeFilter<"MyUser"> | Date | string
     id?: StringFilter<"MyUser"> | string
     password?: StringFilter<"MyUser"> | string
+    lat?: FloatNullableFilter<"MyUser"> | number | null
+    lng?: FloatNullableFilter<"MyUser"> | number | null
     works?: WorkListRelationFilter
   }
 
@@ -6251,13 +6357,13 @@ export namespace Prisma {
     profilePhoto?: SortOrderInput | SortOrder
     work?: SortOrder
     email?: SortOrderInput | SortOrder
-    verified?: SortOrder
-    isActive?: SortOrder
     address?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     id?: SortOrder
     password?: SortOrder
+    lat?: SortOrderInput | SortOrder
+    lng?: SortOrderInput | SortOrder
     works?: WorkOrderByRelationAggregateInput
   }
 
@@ -6271,12 +6377,12 @@ export namespace Prisma {
     mobileNumber?: StringNullableFilter<"MyUser"> | string | null
     profilePhoto?: StringNullableFilter<"MyUser"> | string | null
     work?: StringNullableListFilter<"MyUser">
-    verified?: BoolFilter<"MyUser"> | boolean
-    isActive?: BoolFilter<"MyUser"> | boolean
     address?: StringNullableFilter<"MyUser"> | string | null
     createdAt?: DateTimeFilter<"MyUser"> | Date | string
     updatedAt?: DateTimeFilter<"MyUser"> | Date | string
     password?: StringFilter<"MyUser"> | string
+    lat?: FloatNullableFilter<"MyUser"> | number | null
+    lng?: FloatNullableFilter<"MyUser"> | number | null
     works?: WorkListRelationFilter
   }, "id" | "email">
 
@@ -6286,16 +6392,18 @@ export namespace Prisma {
     profilePhoto?: SortOrderInput | SortOrder
     work?: SortOrder
     email?: SortOrderInput | SortOrder
-    verified?: SortOrder
-    isActive?: SortOrder
     address?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     id?: SortOrder
     password?: SortOrder
+    lat?: SortOrderInput | SortOrder
+    lng?: SortOrderInput | SortOrder
     _count?: MyUserCountOrderByAggregateInput
+    _avg?: MyUserAvgOrderByAggregateInput
     _max?: MyUserMaxOrderByAggregateInput
     _min?: MyUserMinOrderByAggregateInput
+    _sum?: MyUserSumOrderByAggregateInput
   }
 
   export type MyUserScalarWhereWithAggregatesInput = {
@@ -6307,13 +6415,13 @@ export namespace Prisma {
     profilePhoto?: StringNullableWithAggregatesFilter<"MyUser"> | string | null
     work?: StringNullableListFilter<"MyUser">
     email?: StringNullableWithAggregatesFilter<"MyUser"> | string | null
-    verified?: BoolWithAggregatesFilter<"MyUser"> | boolean
-    isActive?: BoolWithAggregatesFilter<"MyUser"> | boolean
     address?: StringNullableWithAggregatesFilter<"MyUser"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"MyUser"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"MyUser"> | Date | string
     id?: StringWithAggregatesFilter<"MyUser"> | string
     password?: StringWithAggregatesFilter<"MyUser"> | string
+    lat?: FloatNullableWithAggregatesFilter<"MyUser"> | number | null
+    lng?: FloatNullableWithAggregatesFilter<"MyUser"> | number | null
   }
 
   export type WorkWhereInput = {
@@ -6323,6 +6431,7 @@ export namespace Prisma {
     id?: StringFilter<"Work"> | string
     workType?: StringFilter<"Work"> | string
     description?: StringFilter<"Work"> | string
+    isActive?: BoolFilter<"Work"> | boolean
     photos?: StringNullableListFilter<"Work">
     alternateNumber?: StringNullableFilter<"Work"> | string | null
     workId?: StringFilter<"Work"> | string
@@ -6334,6 +6443,7 @@ export namespace Prisma {
     id?: SortOrder
     workType?: SortOrder
     description?: SortOrder
+    isActive?: SortOrder
     photos?: SortOrder
     alternateNumber?: SortOrderInput | SortOrder
     workId?: SortOrder
@@ -6348,6 +6458,7 @@ export namespace Prisma {
     NOT?: WorkWhereInput | WorkWhereInput[]
     workType?: StringFilter<"Work"> | string
     description?: StringFilter<"Work"> | string
+    isActive?: BoolFilter<"Work"> | boolean
     photos?: StringNullableListFilter<"Work">
     alternateNumber?: StringNullableFilter<"Work"> | string | null
     workId?: StringFilter<"Work"> | string
@@ -6359,6 +6470,7 @@ export namespace Prisma {
     id?: SortOrder
     workType?: SortOrder
     description?: SortOrder
+    isActive?: SortOrder
     photos?: SortOrder
     alternateNumber?: SortOrderInput | SortOrder
     workId?: SortOrder
@@ -6375,6 +6487,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Work"> | string
     workType?: StringWithAggregatesFilter<"Work"> | string
     description?: StringWithAggregatesFilter<"Work"> | string
+    isActive?: BoolWithAggregatesFilter<"Work"> | boolean
     photos?: StringNullableListFilter<"Work">
     alternateNumber?: StringNullableWithAggregatesFilter<"Work"> | string | null
     workId?: StringWithAggregatesFilter<"Work"> | string
@@ -6395,12 +6508,13 @@ export namespace Prisma {
     pastDeals?: MyWorkerCreatepastDealsInput | string[]
     presentDeals?: MyWorkerCreatepresentDealsInput | string[]
     age?: number | null
-    verified?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     id?: string
     email: string
     password?: string
+    lat?: number | null
+    lng?: number | null
   }
 
   export type MyWorkerUncheckedCreateInput = {
@@ -6417,12 +6531,13 @@ export namespace Prisma {
     pastDeals?: MyWorkerCreatepastDealsInput | string[]
     presentDeals?: MyWorkerCreatepresentDealsInput | string[]
     age?: number | null
-    verified?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     id?: string
     email: string
     password?: string
+    lat?: number | null
+    lng?: number | null
   }
 
   export type MyWorkerUpdateInput = {
@@ -6439,12 +6554,13 @@ export namespace Prisma {
     pastDeals?: MyWorkerUpdatepastDealsInput | string[]
     presentDeals?: MyWorkerUpdatepresentDealsInput | string[]
     age?: NullableIntFieldUpdateOperationsInput | number | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    lat?: NullableFloatFieldUpdateOperationsInput | number | null
+    lng?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type MyWorkerUncheckedUpdateInput = {
@@ -6461,12 +6577,13 @@ export namespace Prisma {
     pastDeals?: MyWorkerUpdatepastDealsInput | string[]
     presentDeals?: MyWorkerUpdatepresentDealsInput | string[]
     age?: NullableIntFieldUpdateOperationsInput | number | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    lat?: NullableFloatFieldUpdateOperationsInput | number | null
+    lng?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type MyWorkerCreateManyInput = {
@@ -6483,12 +6600,13 @@ export namespace Prisma {
     pastDeals?: MyWorkerCreatepastDealsInput | string[]
     presentDeals?: MyWorkerCreatepresentDealsInput | string[]
     age?: number | null
-    verified?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     id?: string
     email: string
     password?: string
+    lat?: number | null
+    lng?: number | null
   }
 
   export type MyWorkerUpdateManyMutationInput = {
@@ -6505,12 +6623,13 @@ export namespace Prisma {
     pastDeals?: MyWorkerUpdatepastDealsInput | string[]
     presentDeals?: MyWorkerUpdatepresentDealsInput | string[]
     age?: NullableIntFieldUpdateOperationsInput | number | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    lat?: NullableFloatFieldUpdateOperationsInput | number | null
+    lng?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type MyWorkerUncheckedUpdateManyInput = {
@@ -6527,12 +6646,13 @@ export namespace Prisma {
     pastDeals?: MyWorkerUpdatepastDealsInput | string[]
     presentDeals?: MyWorkerUpdatepresentDealsInput | string[]
     age?: NullableIntFieldUpdateOperationsInput | number | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    lat?: NullableFloatFieldUpdateOperationsInput | number | null
+    lng?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type MyVendorCreateInput = {
@@ -6548,11 +6668,12 @@ export namespace Prisma {
     bussinessType?: string | null
     feedback?: string | null
     gstNumber?: string | null
-    verified?: boolean
     age?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     id?: string
+    lat?: number | null
+    lng?: number | null
   }
 
   export type MyVendorUncheckedCreateInput = {
@@ -6568,11 +6689,12 @@ export namespace Prisma {
     bussinessType?: string | null
     feedback?: string | null
     gstNumber?: string | null
-    verified?: boolean
     age?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     id?: string
+    lat?: number | null
+    lng?: number | null
   }
 
   export type MyVendorUpdateInput = {
@@ -6588,11 +6710,12 @@ export namespace Prisma {
     bussinessType?: NullableStringFieldUpdateOperationsInput | string | null
     feedback?: NullableStringFieldUpdateOperationsInput | string | null
     gstNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
     age?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
+    lat?: NullableFloatFieldUpdateOperationsInput | number | null
+    lng?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type MyVendorUncheckedUpdateInput = {
@@ -6608,11 +6731,12 @@ export namespace Prisma {
     bussinessType?: NullableStringFieldUpdateOperationsInput | string | null
     feedback?: NullableStringFieldUpdateOperationsInput | string | null
     gstNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
     age?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
+    lat?: NullableFloatFieldUpdateOperationsInput | number | null
+    lng?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type MyVendorCreateManyInput = {
@@ -6628,11 +6752,12 @@ export namespace Prisma {
     bussinessType?: string | null
     feedback?: string | null
     gstNumber?: string | null
-    verified?: boolean
     age?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     id?: string
+    lat?: number | null
+    lng?: number | null
   }
 
   export type MyVendorUpdateManyMutationInput = {
@@ -6648,11 +6773,12 @@ export namespace Prisma {
     bussinessType?: NullableStringFieldUpdateOperationsInput | string | null
     feedback?: NullableStringFieldUpdateOperationsInput | string | null
     gstNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
     age?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
+    lat?: NullableFloatFieldUpdateOperationsInput | number | null
+    lng?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type MyVendorUncheckedUpdateManyInput = {
@@ -6668,11 +6794,12 @@ export namespace Prisma {
     bussinessType?: NullableStringFieldUpdateOperationsInput | string | null
     feedback?: NullableStringFieldUpdateOperationsInput | string | null
     gstNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
     age?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
+    lat?: NullableFloatFieldUpdateOperationsInput | number | null
+    lng?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type MyUserCreateInput = {
@@ -6681,13 +6808,13 @@ export namespace Prisma {
     profilePhoto?: string | null
     work?: MyUserCreateworkInput | string[]
     email?: string | null
-    verified?: boolean
-    isActive?: boolean
     address?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     id?: string
     password?: string
+    lat?: number | null
+    lng?: number | null
     works?: WorkCreateNestedManyWithoutUserInput
   }
 
@@ -6697,13 +6824,13 @@ export namespace Prisma {
     profilePhoto?: string | null
     work?: MyUserCreateworkInput | string[]
     email?: string | null
-    verified?: boolean
-    isActive?: boolean
     address?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     id?: string
     password?: string
+    lat?: number | null
+    lng?: number | null
     works?: WorkUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -6713,13 +6840,13 @@ export namespace Prisma {
     profilePhoto?: NullableStringFieldUpdateOperationsInput | string | null
     work?: MyUserUpdateworkInput | string[]
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    lat?: NullableFloatFieldUpdateOperationsInput | number | null
+    lng?: NullableFloatFieldUpdateOperationsInput | number | null
     works?: WorkUpdateManyWithoutUserNestedInput
   }
 
@@ -6729,13 +6856,13 @@ export namespace Prisma {
     profilePhoto?: NullableStringFieldUpdateOperationsInput | string | null
     work?: MyUserUpdateworkInput | string[]
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    lat?: NullableFloatFieldUpdateOperationsInput | number | null
+    lng?: NullableFloatFieldUpdateOperationsInput | number | null
     works?: WorkUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -6745,13 +6872,13 @@ export namespace Prisma {
     profilePhoto?: string | null
     work?: MyUserCreateworkInput | string[]
     email?: string | null
-    verified?: boolean
-    isActive?: boolean
     address?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     id?: string
     password?: string
+    lat?: number | null
+    lng?: number | null
   }
 
   export type MyUserUpdateManyMutationInput = {
@@ -6760,13 +6887,13 @@ export namespace Prisma {
     profilePhoto?: NullableStringFieldUpdateOperationsInput | string | null
     work?: MyUserUpdateworkInput | string[]
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    lat?: NullableFloatFieldUpdateOperationsInput | number | null
+    lng?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type MyUserUncheckedUpdateManyInput = {
@@ -6775,19 +6902,20 @@ export namespace Prisma {
     profilePhoto?: NullableStringFieldUpdateOperationsInput | string | null
     work?: MyUserUpdateworkInput | string[]
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    lat?: NullableFloatFieldUpdateOperationsInput | number | null
+    lng?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type WorkCreateInput = {
     id?: string
     workType: string
     description: string
+    isActive?: boolean
     photos?: WorkCreatephotosInput | string[]
     alternateNumber?: string | null
     createdAt?: Date | string
@@ -6798,6 +6926,7 @@ export namespace Prisma {
     id?: string
     workType: string
     description: string
+    isActive?: boolean
     photos?: WorkCreatephotosInput | string[]
     alternateNumber?: string | null
     workId: string
@@ -6808,6 +6937,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     workType?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     photos?: WorkUpdatephotosInput | string[]
     alternateNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6818,6 +6948,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     workType?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     photos?: WorkUpdatephotosInput | string[]
     alternateNumber?: NullableStringFieldUpdateOperationsInput | string | null
     workId?: StringFieldUpdateOperationsInput | string
@@ -6828,6 +6959,7 @@ export namespace Prisma {
     id?: string
     workType: string
     description: string
+    isActive?: boolean
     photos?: WorkCreatephotosInput | string[]
     alternateNumber?: string | null
     workId: string
@@ -6838,6 +6970,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     workType?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     photos?: WorkUpdatephotosInput | string[]
     alternateNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6847,6 +6980,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     workType?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     photos?: WorkUpdatephotosInput | string[]
     alternateNumber?: NullableStringFieldUpdateOperationsInput | string | null
     workId?: StringFieldUpdateOperationsInput | string
@@ -6898,11 +7032,6 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -6948,18 +7077,21 @@ export namespace Prisma {
     pastDeals?: SortOrder
     presentDeals?: SortOrder
     age?: SortOrder
-    verified?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     id?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
   }
 
   export type MyWorkerAvgOrderByAggregateInput = {
     dailyWage?: SortOrder
     rating?: SortOrder
     age?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
   }
 
   export type MyWorkerMaxOrderByAggregateInput = {
@@ -6974,12 +7106,13 @@ export namespace Prisma {
     occupation?: SortOrder
     feedback?: SortOrder
     age?: SortOrder
-    verified?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     id?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
   }
 
   export type MyWorkerMinOrderByAggregateInput = {
@@ -6994,18 +7127,21 @@ export namespace Prisma {
     occupation?: SortOrder
     feedback?: SortOrder
     age?: SortOrder
-    verified?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     id?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
   }
 
   export type MyWorkerSumOrderByAggregateInput = {
     dailyWage?: SortOrder
     rating?: SortOrder
     age?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -7058,14 +7194,6 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -7111,16 +7239,19 @@ export namespace Prisma {
     bussinessType?: SortOrder
     feedback?: SortOrder
     gstNumber?: SortOrder
-    verified?: SortOrder
     age?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     id?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
   }
 
   export type MyVendorAvgOrderByAggregateInput = {
     rating?: SortOrder
     age?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
   }
 
   export type MyVendorMaxOrderByAggregateInput = {
@@ -7136,11 +7267,12 @@ export namespace Prisma {
     bussinessType?: SortOrder
     feedback?: SortOrder
     gstNumber?: SortOrder
-    verified?: SortOrder
     age?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     id?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
   }
 
   export type MyVendorMinOrderByAggregateInput = {
@@ -7156,16 +7288,19 @@ export namespace Prisma {
     bussinessType?: SortOrder
     feedback?: SortOrder
     gstNumber?: SortOrder
-    verified?: SortOrder
     age?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     id?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
   }
 
   export type MyVendorSumOrderByAggregateInput = {
     rating?: SortOrder
     age?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
   }
 
   export type WorkListRelationFilter = {
@@ -7184,13 +7319,18 @@ export namespace Prisma {
     profilePhoto?: SortOrder
     work?: SortOrder
     email?: SortOrder
-    verified?: SortOrder
-    isActive?: SortOrder
     address?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     id?: SortOrder
     password?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
+  }
+
+  export type MyUserAvgOrderByAggregateInput = {
+    lat?: SortOrder
+    lng?: SortOrder
   }
 
   export type MyUserMaxOrderByAggregateInput = {
@@ -7198,13 +7338,13 @@ export namespace Prisma {
     mobileNumber?: SortOrder
     profilePhoto?: SortOrder
     email?: SortOrder
-    verified?: SortOrder
-    isActive?: SortOrder
     address?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     id?: SortOrder
     password?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
   }
 
   export type MyUserMinOrderByAggregateInput = {
@@ -7212,13 +7352,23 @@ export namespace Prisma {
     mobileNumber?: SortOrder
     profilePhoto?: SortOrder
     email?: SortOrder
-    verified?: SortOrder
-    isActive?: SortOrder
     address?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     id?: SortOrder
     password?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
+  }
+
+  export type MyUserSumOrderByAggregateInput = {
+    lat?: SortOrder
+    lng?: SortOrder
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type MyUserScalarRelationFilter = {
@@ -7230,6 +7380,7 @@ export namespace Prisma {
     id?: SortOrder
     workType?: SortOrder
     description?: SortOrder
+    isActive?: SortOrder
     photos?: SortOrder
     alternateNumber?: SortOrder
     workId?: SortOrder
@@ -7240,6 +7391,7 @@ export namespace Prisma {
     id?: SortOrder
     workType?: SortOrder
     description?: SortOrder
+    isActive?: SortOrder
     alternateNumber?: SortOrder
     workId?: SortOrder
     createdAt?: SortOrder
@@ -7249,9 +7401,18 @@ export namespace Prisma {
     id?: SortOrder
     workType?: SortOrder
     description?: SortOrder
+    isActive?: SortOrder
     alternateNumber?: SortOrder
     workId?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type MyWorkerCreatepastDealsInput = {
@@ -7290,10 +7451,6 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -7365,6 +7522,10 @@ export namespace Prisma {
     connect?: MyUserWhereUniqueInput
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type WorkUpdatephotosInput = {
     set?: string[]
     push?: string | string[]
@@ -7412,11 +7573,6 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -7493,25 +7649,6 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -7524,6 +7661,17 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -7543,10 +7691,24 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type WorkCreateWithoutUserInput = {
     id?: string
     workType: string
     description: string
+    isActive?: boolean
     photos?: WorkCreatephotosInput | string[]
     alternateNumber?: string | null
     createdAt?: Date | string
@@ -7556,6 +7718,7 @@ export namespace Prisma {
     id?: string
     workType: string
     description: string
+    isActive?: boolean
     photos?: WorkCreatephotosInput | string[]
     alternateNumber?: string | null
     createdAt?: Date | string
@@ -7594,6 +7757,7 @@ export namespace Prisma {
     id?: StringFilter<"Work"> | string
     workType?: StringFilter<"Work"> | string
     description?: StringFilter<"Work"> | string
+    isActive?: BoolFilter<"Work"> | boolean
     photos?: StringNullableListFilter<"Work">
     alternateNumber?: StringNullableFilter<"Work"> | string | null
     workId?: StringFilter<"Work"> | string
@@ -7606,13 +7770,13 @@ export namespace Prisma {
     profilePhoto?: string | null
     work?: MyUserCreateworkInput | string[]
     email?: string | null
-    verified?: boolean
-    isActive?: boolean
     address?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     id?: string
     password?: string
+    lat?: number | null
+    lng?: number | null
   }
 
   export type MyUserUncheckedCreateWithoutWorksInput = {
@@ -7621,13 +7785,13 @@ export namespace Prisma {
     profilePhoto?: string | null
     work?: MyUserCreateworkInput | string[]
     email?: string | null
-    verified?: boolean
-    isActive?: boolean
     address?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     id?: string
     password?: string
+    lat?: number | null
+    lng?: number | null
   }
 
   export type MyUserCreateOrConnectWithoutWorksInput = {
@@ -7652,13 +7816,13 @@ export namespace Prisma {
     profilePhoto?: NullableStringFieldUpdateOperationsInput | string | null
     work?: MyUserUpdateworkInput | string[]
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    lat?: NullableFloatFieldUpdateOperationsInput | number | null
+    lng?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type MyUserUncheckedUpdateWithoutWorksInput = {
@@ -7667,19 +7831,20 @@ export namespace Prisma {
     profilePhoto?: NullableStringFieldUpdateOperationsInput | string | null
     work?: MyUserUpdateworkInput | string[]
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     id?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    lat?: NullableFloatFieldUpdateOperationsInput | number | null
+    lng?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type WorkCreateManyUserInput = {
     id?: string
     workType: string
     description: string
+    isActive?: boolean
     photos?: WorkCreatephotosInput | string[]
     alternateNumber?: string | null
     createdAt?: Date | string
@@ -7689,6 +7854,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     workType?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     photos?: WorkUpdatephotosInput | string[]
     alternateNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7698,6 +7864,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     workType?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     photos?: WorkUpdatephotosInput | string[]
     alternateNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7707,6 +7874,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     workType?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     photos?: WorkUpdatephotosInput | string[]
     alternateNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

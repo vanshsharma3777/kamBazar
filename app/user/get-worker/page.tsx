@@ -23,7 +23,7 @@ interface Worker {
   photo: string;
   video: string;
   experience: string;
-  distance: number;
+  distance: number | null;
 }
 
 interface UserProfile {
@@ -31,6 +31,7 @@ interface UserProfile {
   email: string;
   profilePhoto?: string;
   mobileNumber: ''
+  address: ''
 }
 
 interface FilterOptions {
@@ -46,7 +47,9 @@ const WorkerDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('worker');
   const [loading, setLoading] = useState(true);
   const [sidebar, setSidebar] = useState(true);
+  const [distanceResults, setDistanceResults] = useState<{ [key: string]: number | null }>({});
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [distanceCalculated, setDistanceCalculated] = useState(false);
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const [selectedWorker, setSelectedWorker] = useState<Worker | null>(null);
 
@@ -54,7 +57,8 @@ const WorkerDashboard: React.FC = () => {
     name: '',
     email: '',
     profilePhoto: '',
-    mobileNumber: ''
+    mobileNumber: '',
+    address: ''
   });
 
   const [workers, setWorkers] = useState<Worker[]>([]);
@@ -62,7 +66,7 @@ const WorkerDashboard: React.FC = () => {
   const [filters, setFilters] = useState<FilterOptions>({
     categories: [],
     maxDistance: 100,
-    maxWage: 10000,
+    maxWage: 5000,
     minWage: 0,
     sortBy: 'distance'
   });
@@ -94,16 +98,18 @@ const WorkerDashboard: React.FC = () => {
           console.log("Response data not found");
           return;
         }
-        console.log("user name :", response.data.user.name)
+
         setUser({
           name: response.data.user.name || '',
           email: response.data.user.email || '',
           mobileNumber: response.data.user.mobileNumber || '',
-          profilePhoto: response.data.user.profilePhoto || ''
+          profilePhoto: response.data.user.profilePhoto || '',
+          address: response.data.user.address || ''
         });
         const allWorkers = response?.data?.allWorkers || [];
 
         setWorkers(allWorkers);
+
       } catch (error: any) {
         console.log("Error in home page of user:", error.message);
         alert("Internal error in home page of user");
@@ -123,47 +129,49 @@ const WorkerDashboard: React.FC = () => {
     );
   };
   const filteredWorkers = useMemo(() => {
-    let filtered = [...workers];
+    let filtered = Array.isArray(workers) ? [...workers] : [];
 
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(worker =>
-        worker.name?.toLowerCase().includes(query) ||
-        worker.occupation?.toLowerCase().includes(query) ||
-        worker.address?.toLowerCase().includes(query)
-      );
-    }
 
-    if (filters.categories.length > 0) {
-      filtered = filtered.filter(worker =>
-        filters.categories.some(category =>
-          worker.occupation?.toLowerCase() === category.toLowerCase()
-        )
-      );
-    }
-
-    filtered = filtered.filter(worker =>
-      (worker.distance || 0) <= filters.maxDistance
-    );
-
-    filtered = filtered.filter(worker =>
-      worker.dailyWage >= filters.minWage &&
-      worker.dailyWage <= filters.maxWage
-    );
-
-    filtered.sort((a, b) => {
-      switch (filters.sortBy) {
-        case 'distance':
-          return (a.distance || 0) - (b.distance || 0);
-        case 'wage':
-          return a.dailyWage - b.dailyWage;
-        case 'rating':
-          return b.rating - a.rating;
-        default:
-          return 0;
+    {
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase();
+        filtered = filtered.filter(worker =>
+          worker.name?.toLowerCase().includes(query) ||
+          worker.occupation?.toLowerCase().includes(query) ||
+          worker.address?.toLowerCase().includes(query)
+        );
       }
-    });
 
+      if (filters.categories.length > 0) {
+        filtered = filtered.filter(worker =>
+          filters.categories.some(category =>
+            worker.occupation?.toLowerCase() === category.toLowerCase()
+          )
+        );
+      }
+
+      filtered = filtered.filter(worker =>
+        (worker.distance || 0) <= filters.maxDistance
+      );
+
+      filtered = filtered.filter(worker =>
+        worker.dailyWage >= filters.minWage &&
+        worker.dailyWage <= filters.maxWage
+      );
+
+      filtered.sort((a, b) => {
+        switch (filters.sortBy) {
+          case 'distance':
+            return (a.distance || 0) - (b.distance || 0);
+          case 'wage':
+            return a.dailyWage - b.dailyWage;
+          case 'rating':
+            return b.rating - a.rating;
+          default:
+            return 0;
+        }
+      });
+    }
     return filtered;
   }, [workers, searchQuery, filters]);
 
@@ -196,6 +204,62 @@ const WorkerDashboard: React.FC = () => {
     });
     setSearchQuery('');
   };
+
+
+  useEffect(() => {
+    async function handleDistance() {
+
+      const results: { [key: string]: number | null } = {};
+      if (!workers.length || !user?.address || distanceCalculated) return;
+      const userAddress = user.address
+
+      for (const worker of workers) {
+        try {
+          const response = await axios.post('/api/location', { userAddress, workerAddress: worker.address, })
+          console.log(response)
+          if (!response || !response.data) {
+            console.log(`No response for ${worker.name}`);
+            results[worker.id || worker.name] = null;
+            continue;
+          }
+          if (response.data.valid == true && response.data.distances != null) {
+            console.log(`Distance for ${worker.name}:`, response?.data?.distances);
+            results[worker.id || worker.name] = response?.data?.distances;
+
+            console.log("distanceResults:", distanceResults)
+          } else {
+            console.log(`❌ Invalid address for ${worker.name}`);
+            results[worker.id || worker.name] = null;
+          }
+        }
+        catch (error: any) {
+          if (error.response.status == 400) {
+
+            console.log(`Error fetching distance for ${worker.name}`);
+            alert("Address not found for finding distance")
+          } else if (error.response.status == 404) {
+            console.log(`Error fetching distance for ${worker.name}`);
+
+          }
+          else {
+            console.log(`⚠️ Error fetching distance for ${worker.name}:`, error.message);
+            results[worker.id || worker.name] = null;
+            alert("Internal server error in finding distance")
+          }
+        }
+      }
+      console.log("Final distanceResults:", results);
+      setDistanceResults(results)
+      setWorkers((prev) =>
+        prev.map(worker => ({
+          ...worker,
+          distance: results[worker.id || worker.name] ?? null,
+        }))
+      );
+      setDistanceCalculated(true);
+    }
+    handleDistance()
+  }, [workers, user.address , distanceCalculated] )
 
   return (
     <div className="flex h-screen bg-gradient-to-br relative from-slate-50 to-slate-100">
@@ -265,7 +329,7 @@ const WorkerDashboard: React.FC = () => {
 
           <button
             onClick={() => {
-              router.push('/user/create-work')
+              router.push('/user/create/work')
             }}
             className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'create'
               ? 'bg-blue-600 text-white shadow-lg'
@@ -277,7 +341,7 @@ const WorkerDashboard: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setActiveTab('past-work')}
+            onClick={() =>  router.push('/user/get-work/past')}
             className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'past-work'
               ? 'bg-blue-600 text-white shadow-lg'
               : 'text-slate-600 hover:bg-slate-100'
@@ -377,7 +441,7 @@ const WorkerDashboard: React.FC = () => {
 
           <button
             onClick={() => {
-              router.push('/user/create-work')
+              router.push('/user/create/work')
             }}
             className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'create'
               ? 'bg-blue-600 text-white shadow-lg'
@@ -389,7 +453,7 @@ const WorkerDashboard: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setActiveTab('past-work')}
+            onClick={() =>  router.push('/user/get-work/past')}
             className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'past-work'
               ? 'bg-blue-600 text-white shadow-lg'
               : 'text-slate-600 hover:bg-slate-100'
@@ -400,7 +464,7 @@ const WorkerDashboard: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setActiveTab('profile')}
+            onClick={() => router.push('/user/create-profile')}
             className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'profile'
               ? 'bg-blue-600 text-white shadow-lg'
               : 'text-slate-600 hover:bg-slate-100'
@@ -640,7 +704,14 @@ const WorkerDashboard: React.FC = () => {
 
                           <div className="flex items-center text-sm">
                             <MapPin className="text-slate-500 mr-2" />
-                            <span className="text-slate-600">{worker.distance || 0} km away</span>
+                            <span className="text-slate-600"><span className="text-slate-600 font-medium">
+                              {typeof distanceResults[worker.id || worker.name] === "number"
+                                ? `${distanceResults[worker.id || worker.name]!.toFixed(2)} km from you address`
+                                : distanceResults[worker.id || worker.name] === null
+                                  ? "Address not found"
+                                  : "Calculating..."}
+                            </span>
+                            </span>
                           </div>
 
                           <div className="flex items-center justify-between pt-3 border-t border-slate-200">

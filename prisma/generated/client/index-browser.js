@@ -134,12 +134,13 @@ exports.Prisma.MyWorkerScalarFieldEnum = {
   pastDeals: 'pastDeals',
   presentDeals: 'presentDeals',
   age: 'age',
-  verified: 'verified',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   id: 'id',
   email: 'email',
-  password: 'password'
+  password: 'password',
+  lat: 'lat',
+  lng: 'lng'
 };
 
 exports.Prisma.MyVendorScalarFieldEnum = {
@@ -155,11 +156,12 @@ exports.Prisma.MyVendorScalarFieldEnum = {
   bussinessType: 'bussinessType',
   feedback: 'feedback',
   gstNumber: 'gstNumber',
-  verified: 'verified',
   age: 'age',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  id: 'id'
+  id: 'id',
+  lat: 'lat',
+  lng: 'lng'
 };
 
 exports.Prisma.MyUserScalarFieldEnum = {
@@ -168,19 +170,20 @@ exports.Prisma.MyUserScalarFieldEnum = {
   profilePhoto: 'profilePhoto',
   work: 'work',
   email: 'email',
-  verified: 'verified',
-  isActive: 'isActive',
   address: 'address',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   id: 'id',
-  password: 'password'
+  password: 'password',
+  lat: 'lat',
+  lng: 'lng'
 };
 
 exports.Prisma.WorkScalarFieldEnum = {
   id: 'id',
   workType: 'workType',
   description: 'description',
+  isActive: 'isActive',
   photos: 'photos',
   alternateNumber: 'alternateNumber',
   workId: 'workId',

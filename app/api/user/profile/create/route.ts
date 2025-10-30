@@ -39,13 +39,13 @@ export async function POST(req: Request) {
         }
         const id = decoded.id
         console.log("id: ", id)
-        const isWorkerExists = await prisma.myUser.findFirst({
+        const isUserExists = await prisma.myUser.findFirst({
             where:{
                 id:id
             }
         })
-        console.log("isWorkerExists :" , isWorkerExists)
-        if(!isWorkerExists){
+        console.log("isWorkerExists :" , isUserExists)
+        if(!isUserExists){
             console.log("working")
             return NextResponse.json({
                 valid:false,

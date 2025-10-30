@@ -48,30 +48,22 @@ export default function WorkerProfileForm() {
     const validateForm = () => {
         const newErrors: any = {};
 
-        // Mobile Number validation
         if (!formData.mobileNumber.trim()) {
             newErrors.mobileNumber = 'Mobile number is required';
         } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
             newErrors.mobileNumber = 'Please enter a valid 10-digit mobile number';
         }
 
-        //  Name validation
         if (!formData.name.trim()) {
             newErrors.name = 'Name is required';
         } else if (formData.name.trim().length < 2) {
             newErrors.name = 'Name must be at least 2 characters long';
         }
 
-
-
-
-        // Address validation
         if (!formData.address.trim()) {
             newErrors.address = 'Address is required';
         }
 
-
-        // Profile Photo validation
         if (!formData.profilePhoto) {
             newErrors.profilePhoto = 'Profile photo is required';
         }
@@ -95,7 +87,8 @@ export default function WorkerProfileForm() {
         }
         try {
             const token = localStorage.getItem("token")
-            const response = await axios.post('/api/user/profile/create', formData, {
+            console.log(token)
+            const response = await axios.post('/api/user/work/create', formData, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"

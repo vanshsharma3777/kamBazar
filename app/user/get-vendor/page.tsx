@@ -12,7 +12,7 @@ interface Vendor {
   mobileNumber: string;
   bussinessType: string;
   rating: number;
-  profilePhoto: string;  
+  profilePhoto: string;
   address: string;
   age: number;
   email: string;
@@ -26,7 +26,8 @@ interface UserProfile {
   name: string;
   email: string;
   profilePhoto?: string;
-  mobileNumber:''
+  mobileNumber: string
+  address:string
 }
 
 interface FilterOptions {
@@ -50,12 +51,13 @@ const WorkerDashboard: React.FC = () => {
     name: '',
     email: '',
     profilePhoto: '',
-    mobileNumber:''
+    mobileNumber: '',
+    address:''
   });
 
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [filteredVendors, setFilteredVendors] = useState<Vendor[]>([]);
-  
+
   const [filters, setFilters] = useState<FilterOptions>({
     categories: [],
     maxDistance: 100,
@@ -64,14 +66,14 @@ const WorkerDashboard: React.FC = () => {
     sortBy: 'distance'
   });
 
-  const categories = ['Furniture Store', 'Paint Shop','Plumbing Supplies','Hardware Store', 'Electrical Shop', 'Tailor Shop', 'Cloths Shop','Unisex Salon', 'Welding Shop' , 'Barber Shop', 'Others'];
+  const categories = ['Furniture Store', 'Paint Shop', 'Plumbing Supplies', 'Hardware Store', 'Electrical Shop', 'Tailor Shop', 'Cloths Shop', 'Unisex Salon', 'Welding Shop', 'Barber Shop', 'Others'];
 
   useEffect(() => {
     const getData = async () => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        
+
         const response = await fetch('/api/user/home', {
           method: 'GET',
           headers: {
@@ -92,17 +94,18 @@ const WorkerDashboard: React.FC = () => {
             name: data.user.name || '',
             email: data.user.email || '',
             profilePhoto: data.user.profilePhoto || '',
-            mobileNumber:data.user.mobileNumber || ''
+            mobileNumber: data.user.mobileNumber || '',
+            address:data.user.address ||'' ,
           });
         }
 
         if (data.allVendors && Array.isArray(data.allVendors)) {
           console.log('Vendors fetched:', data.allVendors);
           setVendors(data.allVendors);
-          console.log("data",data.allVendors)
+          console.log("data", data.allVendors)
           const shop = data.allVendors.shopName
           console.log(shop)
-          
+
         } else {
           console.log('No vendors found in response');
           setVendors([]);
@@ -115,24 +118,24 @@ const WorkerDashboard: React.FC = () => {
         setLoading(false);
       }
     };
-    
+
     getData();
   }, []);
 
   const highlightMatch = (text: string, query: string) => {
-  if (!query.trim()) return text; 
-  const regex = new RegExp(`(${query})`, "gi");
-  return text.replace(
-    regex,
-    `<span class='bg-yellow-200 text-black rounded px-[0.5%]'>$1</span>`
-  );
-};
+    if (!query.trim()) return text;
+    const regex = new RegExp(`(${query})`, "gi");
+    return text.replace(
+      regex,
+      `<span class='bg-yellow-200 text-black rounded px-[0.5%]'>$1</span>`
+    );
+  };
 
   useEffect(() => {
     let filtered = [...vendors];
 
     if (filters.categories.length > 0) {
-      filtered = filtered.filter(vendor => 
+      filtered = filtered.filter(vendor =>
         filters.categories.includes(vendor.bussinessType)
       );
     }
@@ -195,230 +198,232 @@ const WorkerDashboard: React.FC = () => {
     setSearchQuery('');
   };
 
+  
+
   return (
     <div className="flex h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-    
-            <aside className="w-72 bg-white shadow-xl   border-r md:flex hidden border-slate-200 flex flex-col">
-              <div className="mb-6 text-center pt-5 relative">
-                <h1 className="text-5xl font-black mb-2 relative tracking-tight">
-                  <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent drop-shadow-sm">
-                    Kaam
-                  </span>
-                  <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent drop-shadow-sm">
-                    Bazar
-                  </span>
-                </h1>
-              </div>
-      
-              <div className="px-6 py-4 border-b border-slate-200">
-                <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 rounded-full bg-gray-600 flex items-center justify-center text-white font-semibold">
-                    {user.profilePhoto ? (
-                      <img src={user.profilePhoto} alt={user.name} className="w-12 h-12 rounded-full object-cover" />
-                    ) : (
-                      user.name ? user.name.charAt(0).toUpperCase() : 'U'
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-slate-800 truncate">{user.name || 'Worker'}</p>
-                    <p className="text-sm text-slate-500 truncate">{user.mobileNumber || 'Mobile number'}</p>
-                  </div>
-                </div>
-              </div>
-              <nav className="p-4 space-y-2 flex-1">
-                <button
-                  onClick={() => {
-                    router.push('/user/home')
-                  }}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'dashboard'
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'text-slate-600 hover:bg-slate-100'
-                    }`}
-                >
-                  <Home size={20} />
-                  <span className="font-medium">Dashboard</span>
-                </button>
-      
-                <button
-                  onClick={() =>router.push('/user/get-worker')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'worker'
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'text-slate-600 hover:bg-slate-100'
-                    }`}
-                >
-                  <Wrench size={20} />
-                  <span className="font-medium">Workers</span>
-                </button>
-      
-                <button
-                  onClick={() =>setActiveTab('vendor')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'vendor'
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'text-slate-600 hover:bg-slate-100'
-                    }`}
-                >
-                  <Store size={20} />
-                  <span className="font-medium">Vendors</span>
-                </button>
-      
-                <button
-                  onClick={() => {
-                    router.push('/user/create-work')
-                  }}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'create'
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'text-slate-600 hover:bg-slate-100'
-                    }`}
-                >
-                  <Briefcase size={20} />
-                  <span className="font-medium">Create New Work</span>
-                </button>
-      
-                <button
-                  onClick={() => setActiveTab('past-work')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'past-work'
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'text-slate-600 hover:bg-slate-100'
-                    }`}
-                >
-                  <Clock size={20} />
-                  <span className="font-medium">Past Works</span>
-                </button>
-      
-                <button
-                  onClick={() => setActiveTab('profile')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'profile'
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'text-slate-600 hover:bg-slate-100'
-                    }`}
-                >
-                  <User size={20} />
-                  <span className="font-medium">Profile</span>
-                </button>
-              </nav>
-      
-              <div className="p-4 border-t border-slate-200">
-                <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-all"
-                >
-                  <LogOut size={20} />
-                  <span className="font-medium">Logout</span>
-                </button>
-              </div>
-            </aside>
 
-        {sidebar && <div className="md:hidden absolute z-1 h-screen w-76 bg-white shadow-xl border-r border-slate-200 flex flex-col">
-                <div className="mb-6 text-center pt-5 relative">
-                  <div className="text-5xl font-black mb-2 relative tracking-tight flex gap-4 justify-center items-center">
-                    <div><span className="bg-gradient-to-r from-purple-500 via-fuchsia-600 to-indigo-700 bg-clip-text text-transparent drop-shadow-sm">
-                      Kaam
-                    </span>
-                      <span className="bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent drop-shadow-sm">
-                        Bazar
-                      </span>
-                    </div>
-                    <div onClick={() => setSidebar(false)}><GoSidebarCollapse size={30} /></div>
-                  </div>
-                </div>
-        
-                <div className="px-6 py-4 border-b border-slate-200">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 rounded-full bg-gray-600 flex items-center justify-center text-white font-semibold">
-                      {user.profilePhoto ? (
-                        <img src={user.profilePhoto} alt={user.name} className="w-12 h-12 rounded-full object-cover" />
-                      ) : (
-                        user.name ? user.name.charAt(0).toUpperCase() : 'W'
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-slate-800 truncate">{user.name || 'Worker'}</p>
-                      <p className="text-sm text-slate-500 truncate">{user.mobileNumber || 'Mobile number'}</p>
-                    </div>
-                  </div>
-                </div>
-                <nav className="p-4 space-y-2 flex-1">
-                  <button
-                    onClick={() => {
-                      router.push('/user/home')
-                    }}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'dashboard'
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'text-slate-600 hover:bg-slate-100'
-                      }`}
-                  >
-                    <Home size={20} />
-                    <span className="font-medium">Dashboard</span>
-                  </button>
-        
-                  <button
-                    onClick={() => setActiveTab('worker')}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'worker'
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'text-slate-600 hover:bg-slate-100'
-                      }`}
-                  >
-                    <Wrench size={20} />
-                    <span className="font-medium">Workers</span>
-                  </button>
-        
-                  <button
-                    onClick={() => router.push('/user/get-vendor')}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'vendor'
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'text-slate-600 hover:bg-slate-100'
-                      }`}
-                  >
-                    <Store size={20} />
-                    <span className="font-medium">Vendors</span>
-                  </button>
-        
-                  <button
-                    onClick={() => {
-                      router.push('/user/create-work')
-                    }}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'create'
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'text-slate-600 hover:bg-slate-100'
-                      }`}
-                  >
-                    <Briefcase size={20} />
-                    <span className="font-medium">Create New Work</span>
-                  </button>
-        
-                  <button
-                    onClick={() => setActiveTab('past-work')}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'past-work'
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'text-slate-600 hover:bg-slate-100'
-                      }`}
-                  >
-                    <Clock size={20} />
-                    <span className="font-medium">Past Works</span>
-                  </button>
-        
-                  <button
-                    onClick={() => router.push('/user/create-profile')}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'profile'
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'text-slate-600 hover:bg-slate-100'
-                      }`}
-                  >
-                    <User size={20} />
-                    <span className="font-medium">Profile</span>
-                  </button>
-                </nav>
-        
-                <div className="p-4 border-t border-slate-200">
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-all"
-                  >
-                    <LogOut size={20} />
-                    <span className="font-medium">Logout</span>
-                  </button>
-                </div>
-              </div>}
+      <aside className="w-72 bg-white shadow-xl   border-r md:flex hidden border-slate-200 flex flex-col">
+        <div className="mb-6 text-center pt-5 relative">
+          <h1 className="text-5xl font-black mb-2 relative tracking-tight">
+            <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent drop-shadow-sm">
+              Kaam
+            </span>
+            <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent drop-shadow-sm">
+              Bazar
+            </span>
+          </h1>
+        </div>
+
+        <div className="px-6 py-4 border-b border-slate-200">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 rounded-full bg-gray-600 flex items-center justify-center text-white font-semibold">
+              {user.profilePhoto ? (
+                <img src={user.profilePhoto} alt={user.name} className="w-12 h-12 rounded-full object-cover" />
+              ) : (
+                user.name ? user.name.charAt(0).toUpperCase() : 'U'
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-slate-800 truncate">{user.name || 'Worker'}</p>
+              <p className="text-sm text-slate-500 truncate">{user.mobileNumber || 'Mobile number'}</p>
+            </div>
+          </div>
+        </div>
+        <nav className="p-4 space-y-2 flex-1">
+          <button
+            onClick={() => {
+              router.push('/user/home')
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'dashboard'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'text-slate-600 hover:bg-slate-100'
+              }`}
+          >
+            <Home size={20} />
+            <span className="font-medium">Dashboard</span>
+          </button>
+
+          <button
+            onClick={() => router.push('/user/get-worker')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'worker'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'text-slate-600 hover:bg-slate-100'
+              }`}
+          >
+            <Wrench size={20} />
+            <span className="font-medium">Workers</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('vendor')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'vendor'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'text-slate-600 hover:bg-slate-100'
+              }`}
+          >
+            <Store size={20} />
+            <span className="font-medium">Vendors</span>
+          </button>
+
+          <button
+            onClick={() => {
+              router.push('/user/create/work')
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'create'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'text-slate-600 hover:bg-slate-100'
+              }`}
+          >
+            <Briefcase size={20} />
+            <span className="font-medium">Create New Work</span>
+          </button>
+
+          <button
+            onClick={() => router.push('/user/get-work/past')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'past-work'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'text-slate-600 hover:bg-slate-100'
+              }`}
+          >
+            <Clock size={20} />
+            <span className="font-medium">Past Works</span>
+          </button>
+
+          <button
+            onClick={() => router.push('/user/create-profile')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'profile'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'text-slate-600 hover:bg-slate-100'
+              }`}
+          >
+            <User size={20} />
+            <span className="font-medium">Profile</span>
+          </button>
+        </nav>
+
+        <div className="p-4 border-t border-slate-200">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-all"
+          >
+            <LogOut size={20} />
+            <span className="font-medium">Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      {sidebar && <div className="md:hidden absolute z-1 h-screen w-76 bg-white shadow-xl border-r border-slate-200 flex flex-col">
+        <div className="mb-6 text-center pt-5 relative">
+          <div className="text-5xl font-black mb-2 relative tracking-tight flex gap-4 justify-center items-center">
+            <div><span className="bg-gradient-to-r from-purple-500 via-fuchsia-600 to-indigo-700 bg-clip-text text-transparent drop-shadow-sm">
+              Kaam
+            </span>
+              <span className="bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent drop-shadow-sm">
+                Bazar
+              </span>
+            </div>
+            <div onClick={() => setSidebar(false)}><GoSidebarCollapse size={30} /></div>
+          </div>
+        </div>
+
+        <div className="px-6 py-4 border-b border-slate-200">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 rounded-full bg-gray-600 flex items-center justify-center text-white font-semibold">
+              {user.profilePhoto ? (
+                <img src={user.profilePhoto} alt={user.name} className="w-12 h-12 rounded-full object-cover" />
+              ) : (
+                user.name ? user.name.charAt(0).toUpperCase() : 'W'
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-slate-800 truncate">{user.name || 'Worker'}</p>
+              <p className="text-sm text-slate-500 truncate">{user.mobileNumber || 'Mobile number'}</p>
+            </div>
+          </div>
+        </div>
+        <nav className="p-4 space-y-2 flex-1">
+          <button
+            onClick={() => {
+              router.push('/user/home')
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'dashboard'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'text-slate-600 hover:bg-slate-100'
+              }`}
+          >
+            <Home size={20} />
+            <span className="font-medium">Dashboard</span>
+          </button>
+
+          <button
+            onClick={() => router.push('/user/get-worker')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'worker'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'text-slate-600 hover:bg-slate-100'
+              }`}
+          >
+            <Wrench size={20} />
+            <span className="font-medium">Workers</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('vendor')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'vendor'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'text-slate-600 hover:bg-slate-100'
+              }`}
+          >
+            <Store size={20} />
+            <span className="font-medium">Vendors</span>
+          </button>
+
+          <button
+            onClick={() => {
+              router.push('/user/create/work')
+            }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'create'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'text-slate-600 hover:bg-slate-100'
+              }`}
+          >
+            <Briefcase size={20} />
+            <span className="font-medium">Create New Work</span>
+          </button>
+
+          <button
+            onClick={() => router.push('/user/get-work/past')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'past-work'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'text-slate-600 hover:bg-slate-100'
+              }`}
+          >
+            <Clock size={20} />
+            <span className="font-medium">Past Works</span>
+          </button>
+
+          <button
+            onClick={() => router.push('/user/create-profile')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'profile'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'text-slate-600 hover:bg-slate-100'
+              }`}
+          >
+            <User size={20} />
+            <span className="font-medium">Profile</span>
+          </button>
+        </nav>
+
+        <div className="p-4 border-t border-slate-200">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-all"
+          >
+            <LogOut size={20} />
+            <span className="font-medium">Logout</span>
+          </button>
+        </div>
+      </div>}
 
       <main className="flex-1 overflow-hidden flex flex-col">
         <header className="bg-white shadow-sm border-b border-slate-200 px-8 py-6">
@@ -450,7 +455,7 @@ const WorkerDashboard: React.FC = () => {
 
             {(activeTab === 'worker' || activeTab === 'vendor') && (
               <div className="flex items-center space-x-3">
-                
+
                 <button
                   onClick={() => setShowFilters(!showFilters)}
                   className="flex items-center space-x-2 px-4 py-3 bg-gray-600 text-white rounded-lg hover:shadow-lg transition-all relative"
@@ -494,10 +499,10 @@ const WorkerDashboard: React.FC = () => {
                 </button>
               </div>
 
-          
+
               <div className="mb-6">
                 <h4 className="font-semibold text-slate-700 mb-3">
-                  Category 
+                  Category
                   {filters.categories.length > 0 && (
                     <span className="ml-2 text-sm text-blue-600">({filters.categories.length} selected)</span>
                   )}
@@ -598,14 +603,14 @@ const WorkerDashboard: React.FC = () => {
                     >
                       <div className="bg-[#13254B] p-6 text-center">
                         <h3 className="text-2xl text-yellow-400 font-bold mb-1 " dangerouslySetInnerHTML={{
-                          __html:highlightMatch(vendor.bussinessType|| 'General Store' , searchQuery)
+                          __html: highlightMatch(vendor.bussinessType || 'General Store', searchQuery)
                         }}>
-                          
+
                         </h3>
                         <div className="flex items-center justify-center space-x-1">
                           {[...Array(5)].map((_, i) => (
-                            <span 
-                              key={i} 
+                            <span
+                              key={i}
                               className={`text-lg ${i < Math.floor(vendor.rating || 0) ? 'text-yellow-300' : 'text-white/80'}`}
                             >
                               ★
@@ -623,9 +628,9 @@ const WorkerDashboard: React.FC = () => {
                             )}
                           </div>
                           <div>
-                            <h4 className="font-semibold text-slate-800 text-lg">{vendor.ownerName ? vendor.ownerName.split(" ").map((word:any) => word.charAt(0).toUpperCase() + word.slice(1)).join(" "): 'Shop Name'}</h4>
+                            <h4 className="font-semibold text-slate-800 text-lg">{vendor.ownerName ? vendor.ownerName.split(" ").map((word: any) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ") : 'Shop Name'}</h4>
                             <p className="text-sm text-slate-800" dangerouslySetInnerHTML={{
-                              __html: highlightMatch(vendor.shopName ? vendor.shopName.split(" ").map((word:any) => word.charAt(0).toUpperCase() + word.slice(1)).join(" "): 'Shop Name' , searchQuery),
+                              __html: highlightMatch(vendor.shopName ? vendor.shopName.split(" ").map((word: any) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ") : 'Shop Name', searchQuery),
                             }}
                             ></p>
                           </div>
@@ -635,7 +640,7 @@ const WorkerDashboard: React.FC = () => {
                           <div className="flex items-start space-x-2 text-sm">
                             <MapPin size={16} className="text-blue-500 mt-1 flex-shrink-0" />
                             <span className="text-slate-600" dangerouslySetInnerHTML={{
-                              __html: highlightMatch(vendor.address || 'Location not specified' , searchQuery),
+                              __html: highlightMatch(vendor.address || 'Location not specified', searchQuery),
                             }}></span>
                           </div>
 

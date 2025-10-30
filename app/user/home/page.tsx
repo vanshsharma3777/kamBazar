@@ -54,7 +54,6 @@ const WorkerDashboard: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log('API Response:', data);
 
         if (data.user) {
           setUser({
@@ -97,10 +96,10 @@ const WorkerDashboard: React.FC = () => {
       <aside className="md:flex hidden w-72 bg-white shadow-xl border-r border-slate-200 flex flex-col">
         <div className="mb-6 text-center pt-5 relative">
           <h1 className="text-5xl font-black mb-2 relative tracking-tight">
-            <span className="bg-gradient-to-r from-purple-500 via-fuchsia-600 to-indigo-700 bg-clip-text text-transparent drop-shadow-sm">
+            <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent drop-shadow-sm">
               Kaam
             </span>
-            <span className="bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent drop-shadow-sm">
+            <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent drop-shadow-sm">
               Bazar
             </span>
           </h1>
@@ -151,7 +150,7 @@ const WorkerDashboard: React.FC = () => {
           </button>
 
           <button
-            onClick={() => router.push('/user/create-work')}
+            onClick={() => router.push('/user/create/work')}
             className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all text-slate-600 hover:bg-slate-100"
           >
             <Briefcase size={20} />
@@ -159,7 +158,7 @@ const WorkerDashboard: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setActiveTab('past-work')}
+            onClick={() =>  router.push('/user/get-work/past')}
             className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'past-work'
               ? 'bg-blue-600 text-white shadow-lg'
               : 'text-slate-600 hover:bg-slate-100'
@@ -170,7 +169,7 @@ const WorkerDashboard: React.FC = () => {
           </button>
 
           <button
-            onClick={() => router.push('user/create-profile')}
+            onClick={() => router.push('/user/create-profile')}
             className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'profile'
               ? 'bg-blue-600 text-white shadow-lg'
               : 'text-slate-600 hover:bg-slate-100'
@@ -251,7 +250,7 @@ const WorkerDashboard: React.FC = () => {
           </button>
 
           <button
-            onClick={() => navigateTo('/user/create-work')}
+            onClick={() => navigateTo('/user/create/work')}
             className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all text-slate-600 hover:bg-slate-100"
           >
             <Briefcase size={20} />
@@ -259,7 +258,7 @@ const WorkerDashboard: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setActiveTab('past-work')}
+            onClick={() => router.push('/user/get-work/past')}
             className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'past-work'
               ? 'bg-blue-600 text-white shadow-lg'
               : 'text-slate-600 hover:bg-slate-100'
@@ -270,7 +269,7 @@ const WorkerDashboard: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setActiveTab('profile')}
+            onClick={() => router.push('/user/create-profile')}
             className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'profile'
               ? 'bg-blue-600 text-white shadow-lg'
               : 'text-slate-600 hover:bg-slate-100'
