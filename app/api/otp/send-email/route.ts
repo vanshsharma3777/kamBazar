@@ -16,7 +16,7 @@ export async function POST(req:Request) {
             valid:false
         },{status:400})
     }
-    console.log("got herr" ,)
+    console.log("got it" ,)
     const otp = Math.floor(100000 +Math.random()*900000).toString()
     console.log("opt ban gyi" ,) 
     await redis.set(`otp:${email}`, otp , `EX`, 120)

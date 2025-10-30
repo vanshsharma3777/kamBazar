@@ -87,7 +87,7 @@ export default function SignupForm() {
             setLoading(false);
         }
     };
-    console.log("got herr")
+    
     const handleSubmitOtp = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!validateForm()) {

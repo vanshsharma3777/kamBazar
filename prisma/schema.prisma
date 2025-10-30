@@ -56,7 +56,6 @@ model MyUser {
   name         String?  @db.VarChar(50)
   mobileNumber String?  @db.VarChar(10)
   profilePhoto String?  @default("")
-  work         String[]
   email        String?  @unique
   address      String?  @default("")
   createdAt    DateTime @default(now())

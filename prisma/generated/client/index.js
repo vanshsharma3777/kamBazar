@@ -196,7 +196,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\Projects\\KaamBazar\\kambazar\\prisma\\generated\\client",
+      "value": "C:\\Users\\adity\\kamBazar\\prisma\\generated\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -210,7 +210,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\Projects\\KaamBazar\\kambazar\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\adity\\kamBazar\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -224,6 +224,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
